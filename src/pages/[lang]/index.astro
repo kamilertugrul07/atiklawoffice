@@ -1,0 +1,156 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import TeamCard from '../../components/TeamCard.astro';
+import { team } from '../../data/office';
+import { langs, path, t, type Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const s = t(lang);
+const k = c(lang);
+---
+
+<Base lang={lang}>
+  <Hero lang={lang} />
+
+  <section class="section">
+    <div class="wrap split">
+      <h2 class="section-title">{s.intro.title}</h2>
+      <div class="intro__body">
+        {s.intro.body.map((p) => <p>{p}</p>)}
+        <a class="text-link" href={path(lang, 'mediation')}>{k.mediation.processTitle}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrap">
+      <div class="split">
+        <h2 class="section-title">{k.home.practiceTitle}</h2>
+        <p class="practice-lead">{k.home.practiceLead}</p>
+      </div>
+      <ul class="areas">
+        {
+          k.practice.areas.slice(0, 8).map((area) => (
+            <li>
+              <h3>{area.title}</h3>
+              <p>{area.summary}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="text-link text-link--light" href={path(lang, 'practice')}>{k.home.practiceLink}</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section-title">{k.home.teamTitle}</h2>
+      <div class="team">
+        {team.map((lawyer) => <TeamCard lawyer={lawyer} lang={lang} compact />)}
+      </div>
+      <a class="text-link" href={path(lang, 'about')}>{k.home.teamLink}</a>
+    </div>
+  </section>
+
+  <section class="section contact-band">
+    <div class="wrap split">
+      <h2 class="section-title">{k.home.contactTitle}</h2>
+      <div>
+        <p>{k.home.contactLead}</p>
+        <a class="btn btn--solid" href={path(lang, 'contact')}>{s.cta}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro__body {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 36rem;
+    color: var(--ink-muted);
+    border-top: 2px solid var(--gold);
+    padding-top: 1.75rem;
+  }
+
+  .intro__body .text-link {
+    justify-self: start;
+    margin-top: 0.75rem;
+    color: var(--ink);
+  }
+
+  .practice-lead {
+    max-width: 36rem;
+    font-size: var(--step-1);
+    font-weight: 330;
+  }
+
+  .areas {
+    margin: clamp(3rem, 6vw, 4.5rem) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.5rem 2rem;
+  }
+
+  .areas li {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--gold);
+  }
+
+  .areas h3 {
+    font-size: var(--step-2);
+    color: #f3f3f2;
+    margin-bottom: 0.75rem;
+  }
+
+  .areas p {
+    font-size: var(--step--1);
+    color: var(--silver-muted);
+  }
+
+  .text-link--light {
+    color: var(--silver);
+  }
+
+  .text-link--light:hover {
+    color: #fff;
+  }
+
+  .team {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2.5rem;
+  }
+
+  /* Kendi zemini olduğu için üst boşluğu korunur */
+  .section.contact-band {
+    background: var(--limestone-200);
+    padding-top: clamp(4rem, 9vw, 7rem);
+  }
+
+  .contact-band p {
+    max-width: 34rem;
+    color: var(--ink-muted);
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 64rem) {
+    .areas {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .areas {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

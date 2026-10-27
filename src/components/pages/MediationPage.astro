@@ -1,0 +1,324 @@
+---
+import PageHead from '../PageHead.astro';
+import TeamCard from '../TeamCard.astro';
+import { team } from '../../data/office';
+import { path, t, type Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const m = c(lang).mediation;
+const mediator = team.find((p) => p.isMediator)!;
+---
+
+<PageHead title={m.title} lead={m.lead} />
+
+<section class="section">
+  <div class="wrap split">
+    <h2 class="section-title">{m.whyTitle}</h2>
+    <div class="grid-2">
+      {
+        m.why.map((w) => (
+          <div>
+            <h3>{w.title}</h3>
+            <p>{w.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="wrap">
+    <div class="split">
+      <h2 class="section-title">{m.voluntaryTitle}</h2>
+      <p class="voluntary-lead">{m.voluntaryLead}</p>
+    </div>
+    <div class="voluntary">
+      {
+        m.voluntary.map((v) => (
+          <article>
+            <h3>{v.title}</h3>
+            <p>{v.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split">
+    <h2 class="section-title">{m.scopeTitle}</h2>
+    <div>
+      <ul class="scope">
+        {m.scope.map((item) => <li>{item}</li>)}
+      </ul>
+      <p class="scope-note">{m.scopeNote}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">{m.processTitle}</h2>
+    <ol class="process">
+      {
+        m.process.map((step) => (
+          <li>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split mediator">
+    <div>
+      <h2 class="section-title">{m.mediatorTitle}</h2>
+      <p class="note">{m.mediatorNote}</p>
+    </div>
+    <div>
+      <TeamCard lawyer={mediator} lang={lang} />
+      <a class="btn btn--solid cta" href={path(lang, 'contact')}>{s.cta}</a>
+    </div>
+  </div>
+</section>
+
+<section class="section mandatory-band">
+  <div class="wrap split">
+    <div>
+      <h2 class="section-title">{m.mandatoryTitle}</h2>
+      <p class="mandatory-lead">{m.mandatoryLead}</p>
+    </div>
+    <table class="mandatory">
+      <tbody>
+        {
+          m.mandatory.map((row) => (
+            <tr>
+              <th scope="row">
+                {row.title}
+                <span>{row.basis}</span>
+              </th>
+              <td>
+                <span class="visually-label">{m.durationLabel}</span>
+                {row.duration}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  h3 {
+    font-size: var(--step-2);
+    margin-bottom: 0.6rem;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 3rem;
+  }
+
+  .grid-2 p,
+  .process p {
+    color: var(--ink-muted);
+  }
+
+  .voluntary-lead {
+    max-width: 36rem;
+    font-size: var(--step-1);
+    font-weight: 330;
+  }
+
+  .voluntary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+    margin-top: clamp(3rem, 6vw, 4rem);
+  }
+
+  .voluntary article {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--gold);
+  }
+
+  .voluntary h3 {
+    color: #f3f3f2;
+  }
+
+  .voluntary p {
+    font-size: var(--step--1);
+    color: var(--silver);
+  }
+
+  .scope {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.5rem;
+    border-top: 1px solid var(--limestone-200);
+  }
+
+  .scope li {
+    padding: 0.9rem 0 0.9rem 1.5rem;
+    border-bottom: 1px solid var(--limestone-200);
+    position: relative;
+  }
+
+  .scope li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.45rem;
+    width: 0.6rem;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .scope-note {
+    margin-top: 1.5rem;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  /* Süreç gerçekten sıralı olduğu için numaralı */
+  .process {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+    counter-reset: step;
+  }
+
+  .process li {
+    counter-increment: step;
+    position: relative;
+    padding-top: 3.5rem;
+    border-top: 2px solid var(--gold);
+  }
+
+  .process li::before {
+    content: counter(step);
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .mediator .note {
+    margin-top: 1rem;
+    color: var(--ink-muted);
+  }
+
+  .cta {
+    margin-top: 2.5rem;
+  }
+
+  /* Zorunlu arabuluculuk: ikincil bilgi, sade bir tablo */
+  .section.mandatory-band {
+    background: var(--limestone-200);
+    padding-top: clamp(4rem, 9vw, 7rem);
+  }
+
+  .mandatory-lead {
+    margin-top: 1rem;
+    color: var(--ink-muted);
+    max-width: 30rem;
+  }
+
+  .mandatory {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .mandatory tr {
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  .mandatory tr:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  .mandatory th,
+  .mandatory td {
+    padding: 1.1rem 0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .mandatory th {
+    font-weight: 450;
+    padding-right: 2rem;
+  }
+
+  .mandatory th span {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: var(--step--1);
+    font-weight: 380;
+    color: var(--ink-muted);
+  }
+
+  .mandatory td {
+    white-space: nowrap;
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    color: var(--petrol-700);
+  }
+
+  .visually-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  @media (max-width: 64rem) {
+    .voluntary,
+    .process {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .grid-2,
+    .voluntary,
+    .process,
+    .scope {
+      grid-template-columns: 1fr;
+    }
+
+    .mandatory tr {
+      display: grid;
+    }
+
+    .mandatory th {
+      padding-bottom: 0.25rem;
+    }
+
+    .mandatory td {
+      padding-top: 0;
+      white-space: normal;
+    }
+  }
+</style>

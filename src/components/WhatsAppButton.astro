@@ -1,0 +1,51 @@
+---
+import { office } from '../data/office';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const w = t(lang).whatsapp;
+const href = `https://wa.me/${office.whatsapp}?text=${encodeURIComponent(w.text)}`;
+---
+
+{
+  office.whatsapp && (
+    <a class="wa" href={href} target="_blank" rel="noopener" aria-label={w.label} title={w.label}>
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 3.2A12.7 12.7 0 0 0 5.1 22.4L3.3 28.8l6.6-1.7A12.7 12.7 0 1 0 16 3.2Zm0 23.2a10.5 10.5 0 0 1-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.5 10.5 0 1 1 16 26.4Zm5.8-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8 0 1.6 1.2 3.2 1.4 3.4.2.2 2.3 3.6 5.6 5 2.8 1.1 3.3.9 3.9.8.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.1-.3-.2-.6-.4Z" />
+      </svg>
+    </a>
+  )
+}
+
+<style>
+  .wa {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--petrol-900);
+    border: 1px solid var(--gold);
+    color: var(--gold-soft);
+    box-shadow: 0 6px 20px rgb(12 35 39 / 0.35);
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .wa:hover {
+    background: var(--gold);
+    color: var(--petrol-900);
+  }
+
+  .wa svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: currentColor;
+  }
+</style>

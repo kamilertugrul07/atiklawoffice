@@ -1,0 +1,23 @@
+---
+// Kök adres: tarayıcı dili Rusça veya İngilizceyse o dile, değilse Türkçeye yönlendirir
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Atik Hukuk Bürosu</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href="https://atiklawoffice.com/tr/" />
+    <script is:inline>
+      var l = (navigator.languages || [navigator.language || ''])
+        .map(function (x) { return x.slice(0, 2).toLowerCase(); })
+        .find(function (x) { return x === 'tr' || x === 'en' || x === 'ru'; });
+      location.replace('/' + (l || 'tr') + '/');
+    </script>
+    <noscript><meta http-equiv="refresh" content="0;url=/tr/" /></noscript>
+  </head>
+  <body>
+    <a href="/tr/">Atik Hukuk Bürosu</a>
+  </body>
+</html>

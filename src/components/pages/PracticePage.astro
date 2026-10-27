@@ -1,0 +1,100 @@
+---
+import PageHead from '../PageHead.astro';
+import Sheet from '../Sheet.astro';
+import { path, t, type Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const p = c(lang).practice;
+const m = c(lang).mediation;
+---
+
+<PageHead title={p.title} lead={p.lead} />
+
+<section class="section">
+  <div class="wrap">
+    <ul class="tiles">
+      {
+        p.areas.map((area) => (
+          <li>
+            <button class="tile" type="button" data-open={`area-${area.id}`} aria-haspopup="dialog">
+              <h2>{area.title}</h2>
+              <p>{area.summary}</p>
+              <span class="tile__more">{p.more}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+{
+  p.areas.map((area) => (
+    <Sheet id={`area-${area.id}`} title={area.title} closeLabel={p.close}>
+      <p class="sheet__lead">{area.summary}</p>
+      <h3 class="sheet__label">{p.scopeLabel}</h3>
+      <ul class="sheet__list">
+        {area.items.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+      <h3 class="sheet__label">{p.factsLabel}</h3>
+      <dl class="sheet__facts">
+        {area.facts.map((f) => (
+          <div>
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="sheet__note">{p.note}</p>
+      <a class="btn btn--solid" href={`${path(lang, 'contact')}?konu=${area.id}`}>{s.cta}</a>
+    </Sheet>
+  ))
+}
+
+<section class="section section--dark">
+  <div class="wrap split">
+    <h2 class="section-title">{m.title}</h2>
+    <div>
+      <p class="mediation-lead">{m.voluntaryLead}</p>
+      <div class="actions">
+        <a class="btn btn--solid" href={path(lang, 'contact')}>{s.cta}</a>
+        <a class="text-link" href={path(lang, 'mediation')}>{m.processTitle}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mediation-lead {
+    max-width: 36rem;
+    font-size: var(--step-1);
+    font-weight: 330;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .actions .text-link {
+    margin-top: 0;
+  }
+
+  .section--dark .text-link {
+    color: var(--silver);
+  }
+
+  .section--dark .text-link:hover {
+    color: #fff;
+  }
+</style>

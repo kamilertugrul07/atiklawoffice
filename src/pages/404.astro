@@ -1,0 +1,18 @@
+---
+// GitHub Pages bilinmeyen adreslerde 404.html'i gösterir
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { path, t } from '../i18n/ui';
+import { c } from '../i18n/content';
+
+const nf = c('tr').notFound;
+---
+
+<Base lang="tr" title={`${nf.title} | ${t('tr').firmName}`}>
+  <PageHead title={nf.title} lead={nf.lead} />
+  <section class="section">
+    <div class="wrap">
+      <a class="btn btn--solid" href={path('tr')}>{nf.home}</a>
+    </div>
+  </section>
+</Base>

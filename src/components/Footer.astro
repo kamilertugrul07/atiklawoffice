@@ -1,0 +1,126 @@
+---
+import { office, team } from '../data/office';
+import { navKeys, path, t, type Lang } from '../i18n/ui';
+import { c } from '../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const k = c(lang);
+const a = office.address;
+---
+
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div>
+      <p class="firm">{s.firmName}</p>
+      <address>
+        {a.street}<br />
+        {a.district} / {a.city}, {a.country}
+      </address>
+      <a href={office.phoneHref}>{office.phone}</a>
+      {office.email && <a href={`mailto:${office.email}`}>{office.email}</a>}
+    </div>
+    <ul class="links">
+      {
+        navKeys.map((key) => (
+          <li>
+            <a href={path(lang, key)}>{s.nav[key]}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <ul class="team">
+      {
+        team.map((p) => (
+          <li>
+            {p.isMediator ? 'Av. Arb.' : 'Av.'} {p.name}
+            <span>{s.footer.bar}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="wrap legal">
+    <p>
+      <span>© {new Date().getFullYear()} {s.firmName}. {s.footer.rights}</span>
+      <a href={path(lang, 'privacy')}>{k.footer.privacy}</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--petrol-900);
+    color: var(--silver-muted);
+    font-size: var(--step--1);
+    padding-block: 4rem 2rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2.5rem;
+  }
+
+  .grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .firm {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    color: var(--silver);
+    margin-bottom: 0.5rem;
+  }
+
+  address {
+    font-style: normal;
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--gold);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+  }
+
+  .team li {
+    color: var(--silver);
+  }
+
+  .team span {
+    display: block;
+    color: var(--silver-muted);
+    font-size: 0.8125rem;
+  }
+
+  .legal {
+    margin-top: 3rem;
+    font-size: 0.8125rem;
+  }
+
+  .legal p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--petrol-700);
+  }
+</style>

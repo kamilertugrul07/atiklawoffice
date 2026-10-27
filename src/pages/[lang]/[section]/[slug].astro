@@ -1,0 +1,109 @@
+---
+// Yazı detay sayfası (yalnızca "yazılar" bölümü altında)
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PageHead from '../../../components/PageHead.astro';
+import { routes, t, type Lang } from '../../../i18n/ui';
+import { c } from '../../../i18n/content';
+import { articleLang, articleSlug, formatDate, type Article } from '../../../lib/articles';
+
+export async function getStaticPaths() {
+  const all = await getCollection('articles');
+  const href = (e: Article) => {
+    const l = articleLang(e);
+    return `/${l}/${routes.articles[l]}/${articleSlug(e)}/`;
+  };
+  return all.map((entry) => {
+    const lang = articleLang(entry);
+    // Aynı yazının diğer dillerdeki sürümleri; olmayan dilde yazılar listesine gidilir
+    const alternates = Object.fromEntries(
+      all.filter((e) => e.data.key === entry.data.key).map((e) => [articleLang(e), href(e)]),
+    );
+    return {
+      params: { lang, section: routes.articles[lang], slug: articleSlug(entry) },
+      props: { entry, alternates },
+    };
+  });
+}
+
+const { entry, alternates } = Astro.props as { entry: Article; alternates: Partial<Record<Lang, string>> };
+const lang = Astro.params.lang as Lang;
+const a = c(lang).articles;
+const { Content } = await render(entry);
+---
+
+<Base
+  lang={lang}
+  routeKey="articles"
+  alternates={alternates}
+  title={`${entry.data.title} | ${t(lang).firmName}`}
+  description={entry.data.description}
+>
+  <PageHead title={entry.data.title}>
+    <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date, lang)}</time>
+  </PageHead>
+
+  <article class="section">
+    <div class="wrap">
+      <div class="prose">
+        <p class="lead">{entry.data.description}</p>
+        <Content />
+        <p class="note">{a.note}</p>
+        <a class="text-link" href={`/${lang}/${routes.articles[lang]}/`}>{a.back}</a>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  time {
+    display: block;
+    margin-top: 1.5rem;
+    color: var(--silver-muted);
+    font-size: var(--step--1);
+  }
+
+  .prose {
+    max-width: 42rem;
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+
+  .lead {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    line-height: 1.35;
+    margin-bottom: 2.5rem;
+  }
+
+  .prose :global(h2) {
+    font-size: var(--step-2);
+    margin-top: 2.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose :global(p + p) {
+    margin-top: 1rem;
+  }
+
+  .prose :global(ul) {
+    padding-left: 1.25rem;
+    margin: 1rem 0;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--gold);
+  }
+
+  .prose :global(strong) {
+    font-weight: 550;
+  }
+
+  .note {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--limestone-200);
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+</style>

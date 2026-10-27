@@ -1,0 +1,46 @@
+---
+// Alt sayfaların koyu üst bandı; header bu bandın üzerinde durur
+interface Props {
+  title: string;
+  lead?: string;
+}
+const { title, lead } = Astro.props;
+---
+
+<section class="page-head">
+  <div class="wrap">
+    <h1>{title}</h1>
+    {lead && <p>{lead}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-head {
+    background:
+      radial-gradient(ellipse 60% 90% at 85% 0%, var(--petrol-700) 0%, transparent 70%),
+      var(--petrol-800);
+    color: var(--silver);
+    padding-top: calc(var(--header-h) + clamp(4rem, 9vw, 7rem));
+    padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  h1 {
+    max-width: 18ch;
+    font-size: var(--step-4);
+    font-weight: 450;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    color: #f3f3f2;
+  }
+
+  p {
+    max-width: 40rem;
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 2px solid var(--gold);
+    font-size: var(--step-1);
+    line-height: 1.55;
+    font-weight: 330;
+  }
+</style>

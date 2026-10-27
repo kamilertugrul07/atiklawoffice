@@ -1,0 +1,39 @@
+---
+// Tüm alt sayfalar: adres her dilde farklı olduğu için tek dosyadan dağıtılır
+import Base from '../../layouts/Base.astro';
+import MediationPage from '../../components/pages/MediationPage.astro';
+import PracticePage from '../../components/pages/PracticePage.astro';
+import AboutPage from '../../components/pages/AboutPage.astro';
+import ArticlesPage from '../../components/pages/ArticlesPage.astro';
+import ContactPage from '../../components/pages/ContactPage.astro';
+import PrivacyPage from '../../components/pages/PrivacyPage.astro';
+import { langs, routes, t, type Lang, type RouteKey } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+
+const pages = {
+  mediation: MediationPage,
+  practice: PracticePage,
+  about: AboutPage,
+  articles: ArticlesPage,
+  contact: ContactPage,
+  privacy: PrivacyPage,
+} satisfies Record<RouteKey, unknown>;
+
+export function getStaticPaths() {
+  return langs.flatMap((lang) =>
+    (Object.keys(routes) as RouteKey[]).map((key) => ({
+      params: { lang, section: routes[key][lang] },
+      props: { key },
+    })),
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const { key } = Astro.props as { key: RouteKey };
+const Page = pages[key];
+const page = c(lang)[key];
+---
+
+<Base lang={lang} routeKey={key} title={`${page.title} | ${t(lang).firmName}`} description={page.lead}>
+  <Page lang={lang} />
+</Base>

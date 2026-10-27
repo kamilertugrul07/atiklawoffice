@@ -1,0 +1,491 @@
+---
+import PageHead from '../PageHead.astro';
+import { office, team } from '../../data/office';
+import { path, t, type Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const k = c(lang).contact;
+const f = k.fields;
+const a = office.address;
+const mapEmbed = `https://www.google.com/maps?q=${office.mapsCoords}&z=17&output=embed`;
+const mapLink = office.mapsLink;
+---
+
+<PageHead title={k.title} lead={k.lead} />
+
+<section class="section">
+  <div class="wrap contact">
+    <form
+      class="form"
+      action="https://api.web3forms.com/submit"
+      method="POST"
+      data-form
+      data-sending={k.sending}
+      data-success={k.success}
+      data-error={k.error}
+    >
+      <h2>{k.formTitle}</h2>
+      <input type="hidden" name="access_key" value={office.web3formsKey} />
+      <input type="hidden" name="subject" value={`${k.formTitle} | atiklawoffice.com`} />
+      <input type="hidden" name="from_name" value="atiklawoffice.com" />
+      <!-- Spam koruması: insanlar bu alanı görmez -->
+      <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" />
+
+      <div class="row">
+        <label>
+          <span>{f.name}</span>
+          <input name="name" required autocomplete="name" />
+        </label>
+        <label>
+          <span>{f.company} <em>({k.optional})</em></span>
+          <input name="company" autocomplete="organization" />
+        </label>
+      </div>
+      <div class="row">
+        <label>
+          <span>{f.email}</span>
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+        <label>
+          <span>{f.phone}</span>
+          <input type="tel" name="phone" required autocomplete="tel" />
+        </label>
+      </div>
+      <label>
+        <span>{f.topic}</span>
+        <select name="topic" required data-topic>
+          <optgroup label={k.topicGroups.mediation}>
+            {k.mediationTopics.map((topic) => <option data-area={topic.id}>{topic.label}</option>)}
+          </optgroup>
+          <optgroup label={k.topicGroups.practice}>
+            {c(lang).practice.areas.map((area) => <option data-area={area.id}>{area.title}</option>)}
+          </optgroup>
+        </select>
+      </label>
+      <label>
+        <span>{f.lawyer}</span>
+        <select name="lawyer" data-lawyer>
+          <option value="">{k.lawyerAny}</option>
+          {
+            team.map((lawyer) => (
+              <option value={lawyer.name} data-areas={lawyer.areas.join(' ')}>
+                {lawyer.isMediator ? 'Av. Arb.' : 'Av.'} {lawyer.name}
+              </option>
+            ))
+          }
+        </select>
+        <small class="hint" data-lawyer-hint hidden>{k.lawyerHint}</small>
+      </label>
+      <div class="row">
+        <label>
+          <span>{f.date}</span>
+          <input type="date" name="date" data-min-today />
+        </label>
+        <label>
+          <span>{f.time}</span>
+          <select name="time">
+            {k.times.map((time) => <option>{time}</option>)}
+          </select>
+        </label>
+      </div>
+      <fieldset>
+        <legend>{f.mode}</legend>
+        <div class="modes">
+          {
+            k.modes.map((mode, i) => (
+              <label class="choice">
+                <input type="radio" name="mode" value={mode} checked={i === 0} />
+                <span>{mode}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <label>
+        <span>{f.message}</span>
+        <textarea name="message" rows="5" required></textarea>
+      </label>
+      <label class="choice consent">
+        <input type="checkbox" name="consent" value="yes" required />
+        <span>
+          {f.consent}
+          <a href={path(lang, 'privacy')}>{f.consentLink}</a>
+        </span>
+      </label>
+
+      <button class="btn btn--solid" type="submit">{k.submit}</button>
+      <p class="status" role="status" aria-live="polite" data-status></p>
+    </form>
+
+    <aside class="info">
+      <h2>{k.infoTitle}</h2>
+      <address>
+        {s.firmName}<br />
+        {a.street}<br />
+        {a.district} / {a.city}
+      </address>
+      <dl>
+        <div>
+          <dt>{k.phone}</dt>
+          <dd><a href={office.phoneHref}>{office.phone}</a></dd>
+        </div>
+        {
+          office.email && (
+            <div>
+              <dt>{k.email}</dt>
+              <dd>
+                <a href={`mailto:${office.email}`}>{office.email}</a>
+              </dd>
+            </div>
+          )
+        }
+        {
+          office.kep && (
+            <div>
+              <dt>{k.kep}</dt>
+              <dd>{office.kep}</dd>
+            </div>
+          )
+        }
+        {
+          office.linkedin && (
+            <div>
+              <dt>LinkedIn</dt>
+              <dd>
+                <a href={office.linkedin} rel="noopener">
+                  LinkedIn
+                </a>
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+
+      <h2 class="map-title">{k.mapTitle}</h2>
+      <div class="map" data-map={mapEmbed}>
+        <p>{k.mapNote}</p>
+        <button class="btn btn--ghost-dark" type="button" data-map-load>{k.mapButton}</button>
+        <a href={mapLink} target="_blank" rel="noopener">{k.mapLink}</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  h2 {
+    font-size: var(--step-2);
+    margin-bottom: 1.5rem;
+  }
+
+  .form {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  label,
+  fieldset {
+    display: grid;
+    gap: 0.4rem;
+    font-size: var(--step--1);
+  }
+
+  label > span,
+  legend {
+    color: var(--ink-muted);
+  }
+
+  em {
+    font-style: normal;
+    opacity: 0.75;
+  }
+
+  .hint {
+    font-size: 0.8125rem;
+    color: var(--petrol-700);
+  }
+
+  input:not([type='checkbox'], [type='radio']),
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--limestone-200);
+    border-bottom-color: var(--ink-muted);
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--step-0);
+    border-radius: 0;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 0;
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: 0.4rem;
+  }
+
+  .modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    color: var(--ink);
+  }
+
+  .choice input {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.2rem;
+    accent-color: var(--petrol-800);
+    flex: none;
+  }
+
+  .consent span {
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .consent a {
+    display: inline-block;
+    margin-left: 0.25rem;
+    color: var(--ink);
+    text-decoration-color: var(--gold);
+  }
+
+  .honeypot {
+    display: none;
+  }
+
+  button[type='submit'] {
+    justify-self: start;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  button[disabled] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .status {
+    padding: 1rem 1.25rem;
+    border-left: 2px solid var(--gold);
+    background: #fff;
+  }
+
+  .status.is-error {
+    border-left-color: #a23b2c;
+  }
+
+  .info {
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--gold);
+  }
+
+  address {
+    font-style: normal;
+    line-height: 1.7;
+  }
+
+  dl {
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  dt {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  .info a {
+    text-decoration-color: var(--gold);
+    text-underline-offset: 3px;
+  }
+
+  .map-title {
+    margin-top: 3rem;
+  }
+
+  .map {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    padding: 1.5rem;
+    background: var(--limestone-200);
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  .map.is-loaded {
+    padding: 0;
+  }
+
+  .map iframe {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 0;
+  }
+
+  .btn--ghost-dark {
+    background: none;
+    color: var(--ink);
+    border-color: var(--ink);
+    cursor: pointer;
+  }
+
+  .btn--ghost-dark:hover {
+    background: var(--petrol-800);
+    border-color: var(--petrol-800);
+    color: #fff;
+  }
+
+  @media (max-width: 56rem) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  const status = form?.querySelector<HTMLElement>('[data-status]');
+  const submit = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  // Konuya göre avukat önerisi: konuyu çalışma alanlarında en önde tutan avukat seçilir,
+  // ziyaretçi seçimi değiştirebilir
+  const topic = form?.querySelector<HTMLSelectElement>('[data-topic]');
+  const lawyer = form?.querySelector<HTMLSelectElement>('[data-lawyer]');
+  const hint = form?.querySelector<HTMLElement>('[data-lawyer-hint]');
+
+  function suggestLawyer() {
+    if (!topic || !lawyer || !hint) return;
+    const area = topic.selectedOptions[0]?.dataset.area ?? '';
+    let best: HTMLOptionElement | undefined;
+    let bestRank = Infinity;
+    for (const opt of lawyer.options) {
+      const rank = (opt.dataset.areas ?? '').split(' ').indexOf(area);
+      if (rank !== -1 && rank < bestRank) {
+        best = opt;
+        bestRank = rank;
+      }
+    }
+    lawyer.value = best?.value ?? '';
+    hint.hidden = !best;
+  }
+
+  topic?.addEventListener('change', suggestLawyer);
+  lawyer?.addEventListener('change', () => hint && (hint.hidden = true));
+
+  // Başka sayfalardan gelen ön seçim: ?konu=<alan> veya ?avukat=<ad>
+  const params = new URLSearchParams(location.search);
+  const preTopic = params.get('konu');
+  const preLawyer = params.get('avukat');
+  if (topic && preTopic) {
+    const opt = [...topic.options].find((o) => o.dataset.area === preTopic);
+    if (opt) topic.value = opt.value;
+  }
+  suggestLawyer();
+  if (lawyer && preLawyer && [...lawyer.options].some((o) => o.value === preLawyer)) {
+    lawyer.value = preLawyer;
+    if (hint) hint.hidden = true;
+  }
+
+  // Geçmiş tarih seçilmesin
+  const date = form?.querySelector<HTMLInputElement>('[data-min-today]');
+  if (date) date.min = new Date().toISOString().slice(0, 10);
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!status || !submit) return;
+    const label = submit.textContent;
+    submit.disabled = true;
+    submit.textContent = form.dataset.sending!;
+    status.textContent = '';
+    status.classList.remove('is-error');
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message);
+      status.textContent = form.dataset.success!;
+      form.reset();
+      suggestLawyer();
+    } catch {
+      status.textContent = form.dataset.error!;
+      status.classList.add('is-error');
+    } finally {
+      submit.disabled = false;
+      submit.textContent = label;
+    }
+  });
+
+  // Harita yalnızca istenince Google'dan yüklenir
+  const map = document.querySelector<HTMLElement>('[data-map]');
+  map?.querySelector('[data-map-load]')?.addEventListener('click', () => {
+    const frame = document.createElement('iframe');
+    frame.src = map.dataset.map!;
+    frame.loading = 'lazy';
+    frame.referrerPolicy = 'no-referrer-when-downgrade';
+    frame.title = map.querySelector('a')?.textContent ?? 'Google Maps';
+    map.replaceChildren(frame);
+    map.classList.add('is-loaded');
+  });
+</script>

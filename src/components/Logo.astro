@@ -1,0 +1,21 @@
+---
+import type { Lang } from '../i18n/ui';
+import { logoA, logoRing, logoRingWidth, logoRule, logoSubtitle, logoTik } from '../data/logo';
+
+interface Props {
+  lang: Lang;
+  label: string;
+  class?: string;
+}
+const { lang, label, class: className } = Astro.props;
+---
+
+<svg class:list={['logo', className]} viewBox="76 86 1012 438" role="img" aria-label={label}>
+  <path d={logoRing} fill="none" stroke="var(--logo-gold, #c2a15f)" stroke-width={logoRingWidth}></path>
+  <g fill="var(--logo-ink, #eceeee)">
+    <path d={logoA}></path>
+    <path d={logoTik}></path>
+    <path d={logoSubtitle[lang]}></path>
+  </g>
+  <rect {...logoRule} fill="var(--logo-gold, #c2a15f)"></rect>
+</svg>

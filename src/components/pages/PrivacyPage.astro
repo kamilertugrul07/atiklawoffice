@@ -1,0 +1,51 @@
+---
+import PageHead from '../PageHead.astro';
+import { type Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const p = c(lang).privacy;
+---
+
+<PageHead title={p.title} lead={p.lead} />
+
+<section class="section">
+  <div class="wrap">
+    <div class="prose">
+    {
+      p.sections.map((sec) => (
+        <section>
+          <h2>{sec.title}</h2>
+          {sec.body.map((para) => (
+            <p>{para}</p>
+          ))}
+        </section>
+      ))
+    }
+    </div>
+  </div>
+</section>
+
+<style>
+  .prose {
+    max-width: 48rem;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  h2 {
+    font-size: var(--step-2);
+    margin-bottom: 0.75rem;
+  }
+
+  p + p {
+    margin-top: 0.75rem;
+  }
+
+  p {
+    color: var(--ink-muted);
+  }
+</style>

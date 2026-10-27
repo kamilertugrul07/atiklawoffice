@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { langs, path, t, type Lang, type RouteKey } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  routeKey?: RouteKey;
+  title?: string;
+  description?: string;
+  // Sayfanın diğer dillerdeki adresleri (yazılar gibi routeKey ile bulunamayan sayfalar için)
+  alternates?: Partial<Record<Lang, string>>;
+}
+const { lang, routeKey, title, description } = Astro.props;
+const s = t(lang);
+const site = Astro.site!;
+const alternates =
+  Astro.props.alternates ?? Object.fromEntries(langs.map((l) => [l, path(l, routeKey)]));
+---
+
+<!doctype html>
+<html lang={s.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ?? s.meta.title}</title>
+    <meta name="description" content={description ?? s.meta.description} />
+    <meta name="theme-color" content="#113138" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(alternates[lang] ?? path(lang, routeKey), site)} />
+    {
+      Object.entries(alternates).map(([l, href]) => (
+        <link rel="alternate" hreflang={l} href={new URL(href!, site)} />
+      ))
+    }
+    {alternates.tr && <link rel="alternate" hreflang="x-default" href={new URL(alternates.tr, site)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{s.skip}</a>
+    <Header lang={lang} routeKey={routeKey} alternates={alternates} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <WhatsAppButton lang={lang} />
+  </body>
+</html>

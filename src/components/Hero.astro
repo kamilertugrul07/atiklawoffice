@@ -1,0 +1,230 @@
+---
+import { path, t, type Lang } from '../i18n/ui';
+import { logoA, logoRing, logoRingWidth, logoRule, logoTik } from '../data/logo';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+
+// Logodaki A'nın tepe noktası ve bacak dipleri (src/data/logo.ts ile aynı koordinatlar)
+const apex = { x: 251, y: 93 };
+const feet = { left: 133, right: 372, y: 351 };
+// Altın çizgi: logodakinden kalın, ortadan iki yana uzar
+const rule = { y: logoRule.y - 2, height: 7, x: logoRule.x, width: logoRule.width };
+const ruleCenter = rule.x + rule.width / 2;
+// "TİK" soldan sağa açılan maskeyle belirir
+const tikBox = { x: 455, y: 170, width: 640, height: 195 };
+---
+
+<section class="hero" data-hero>
+  <div class="wrap hero__inner">
+    <div class="hero__text">
+      <h1>{s.hero.title}</h1>
+      <p class="hero__lead">{s.hero.lead}</p>
+      <div class="hero__actions">
+        <a class="btn btn--solid" href={path(lang, 'contact')}>{s.cta}</a>
+        <a class="btn btn--ghost" href={path(lang, 'practice')}>{s.hero.secondary}</a>
+      </div>
+    </div>
+
+    <!--
+      "Ortak zemin": iki taraf iki paralel çizgi olarak başlar, kaydırdıkça tepede buluşup A'yı oluşturur;
+      halka çizilir, A dolar, altın çizgi uzanır ve TİK belirir. Sonuç: alt yazısız logo.
+    -->
+    <svg class="converge" viewBox="70 40 1030 410" aria-hidden="true" data-converge>
+      <defs>
+        <clipPath id="hero-tik-reveal">
+          <rect x={tikBox.x} y={tikBox.y} width="0" height={tikBox.height} data-tik-clip></rect>
+        </clipPath>
+      </defs>
+
+      <path class="converge__ring" d={logoRing} stroke-width={logoRingWidth} pathLength="1" data-ring></path>
+      <path class="converge__fill" d={logoA} data-a></path>
+
+      <!-- Açılış animasyonu <g> üzerinde, kaydırma animasyonu <line> üzerinde: birbirine karışmazlar -->
+      <g data-intro>
+        <line class="converge__line converge__line--a" x1={feet.left} y1={feet.y} x2={feet.left} y2={apex.y} data-line-a></line>
+      </g>
+      <g data-intro>
+        <line class="converge__line converge__line--b" x1={feet.right} y1={feet.y} x2={feet.right} y2={apex.y} data-line-b></line>
+      </g>
+
+      <rect class="converge__rule" x={ruleCenter} y={rule.y} width="0" height={rule.height} data-rule></rect>
+      <path class="converge__fill converge__tik" d={logoTik} clip-path="url(#hero-tik-reveal)"></path>
+    </svg>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    background:
+      radial-gradient(ellipse 70% 60% at 78% 45%, var(--petrol-700) 0%, transparent 70%),
+      var(--petrol-800);
+    color: var(--silver);
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+    min-height: 100svh;
+    padding-top: calc(var(--header-h) + 2rem);
+    padding-bottom: 4rem;
+  }
+
+  .hero__text {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* EN ve RU başlıklar daha uzun */
+  :global(html:is([lang='en'], [lang='ru'])) h1 {
+    font-size: clamp(2.5rem, 5.2vw, 4.75rem);
+  }
+
+  h1 {
+    max-width: 15ch;
+    font-size: clamp(2.75rem, 6.2vw, 5.75rem);
+    font-weight: 450;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    color: #f3f3f2;
+  }
+
+  .hero__lead {
+    max-width: 34rem;
+    margin-top: 2rem;
+    font-size: var(--step-1);
+    line-height: 1.55;
+    font-weight: 330;
+    color: var(--silver);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.75rem;
+  }
+
+  .converge {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .converge__line {
+    stroke: var(--gold);
+    stroke-linecap: square;
+  }
+
+  .converge__line--a {
+    stroke-width: 4;
+  }
+
+  .converge__line--b {
+    stroke-width: 7;
+  }
+
+  .converge__ring {
+    fill: none;
+    stroke: var(--gold);
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .converge__fill {
+    fill: #eceeee;
+  }
+
+  [data-a] {
+    opacity: 0;
+  }
+
+  .converge__rule {
+    fill: var(--gold-soft);
+  }
+
+  @media (max-width: 60rem) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      align-content: center;
+    }
+
+    /* Mobilde logo metnin üstünde durur */
+    .converge {
+      order: -1;
+      width: min(100%, 26rem);
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const lines = document.querySelectorAll('[data-line-a], [data-line-b]');
+  const ring = document.querySelector('[data-ring]');
+  const fillA = document.querySelector('[data-a]');
+  const rule = document.querySelector<SVGRectElement>('[data-rule]');
+  const tikClip = document.querySelector('[data-tik-clip]');
+  const apex = { x2: 251, y2: 93 };
+  const ruleFull = { x: 82, width: 996 };
+
+  function showFinal() {
+    gsap.set(lines, { attr: apex, opacity: 0 });
+    gsap.set(ring, { strokeDashoffset: 0 });
+    gsap.set(fillA, { opacity: 1 });
+    gsap.set(rule, { attr: ruleFull });
+    gsap.set(tikClip, { attr: { width: 640 } });
+  }
+
+  function buildTimeline(vars: gsap.TimelineVars) {
+    return gsap
+      .timeline(vars)
+      .to(lines, { attr: apex, ease: 'power2.inOut', duration: 1 })
+      .to(ring, { strokeDashoffset: 0, ease: 'none', duration: 0.8 }, '-=0.15')
+      .to(fillA, { opacity: 1, duration: 0.45 }, '-=0.35')
+      .to(lines, { opacity: 0, duration: 0.45 }, '<')
+      .to(rule, { attr: ruleFull, ease: 'power2.out', duration: 0.7 }, '-=0.1')
+      .to(tikClip, { attr: { width: 640 }, ease: 'power1.inOut', duration: 0.9 }, '-=0.35');
+  }
+
+  function intro() {
+    // Açılış: iki çizgi aşağıdan yukarı uzar
+    return gsap.from('[data-intro]', {
+      scaleY: 0,
+      svgOrigin: '250 351',
+      duration: 1.4,
+      ease: 'power3.out',
+      stagger: 0.15,
+    });
+  }
+
+  const mm = gsap.matchMedia();
+
+  mm.add('(prefers-reduced-motion: reduce)', showFinal);
+
+  // Geniş ekran: ilk ekran sabitlenir, logo kaydırmayla kurulur
+  mm.add('(min-width: 60.01rem) and (prefers-reduced-motion: no-preference)', () => {
+    intro();
+    buildTimeline({
+      scrollTrigger: { trigger: hero, start: 'top top', end: '+=110%', scrub: 0.8, pin: true },
+    });
+  });
+
+  // Mobil: sabitleme yok, logo açılıştan sonra kendiliğinden kurulur
+  mm.add('(max-width: 60rem) and (prefers-reduced-motion: no-preference)', () => {
+    intro();
+    buildTimeline({ delay: 1.3, defaults: { duration: 0.8 } });
+  });
+</script>

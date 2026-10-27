@@ -1,0 +1,88 @@
+---
+import type { Lawyer } from '../data/office';
+import { t, type Lang } from '../i18n/ui';
+import { c } from '../i18n/content';
+import Monogram from './Monogram.astro';
+
+interface Props {
+  lawyer: Lawyer;
+  lang: Lang;
+  compact?: boolean;
+}
+const { lawyer, lang, compact = false } = Astro.props;
+const s = t(lang);
+const a = c(lang).about;
+---
+
+<article class:list={['person', { 'person--compact': compact }]}>
+  <Monogram name={lawyer.name} size={compact ? 'sm' : 'md'} />
+  <div>
+    <h3>{lawyer.isMediator ? 'Av. Arb.' : 'Av.'} {lawyer.name}</h3>
+    <p class="role">{lawyer.title[lang]}</p>
+    {
+      !compact && (
+        <dl>
+          <div>
+            <dt>{a.bar}</dt>
+            <dd>{s.footer.bar}</dd>
+          </div>
+          <div>
+            <dt>{a.education}</dt>
+            <dd>{lawyer.university}</dd>
+          </div>
+          {lawyer.email && (
+            <div>
+              <dt>{a.email}</dt>
+              <dd>
+                <a href={`mailto:${lawyer.email}`}>{lawyer.email}</a>
+              </dd>
+            </div>
+          )}
+          <div>
+            <dt>{a.phone}</dt>
+            <dd>{lawyer.phone}</dd>
+          </div>
+        </dl>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .person {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  h3 {
+    font-size: var(--step-2);
+  }
+
+  .role {
+    margin-top: 0.35rem;
+    color: var(--ink-muted);
+  }
+
+  dl {
+    margin: 1.5rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--limestone-200);
+    display: grid;
+    gap: 0.75rem;
+    font-size: var(--step--1);
+  }
+
+  dt {
+    color: var(--ink-muted);
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  a {
+    text-decoration-color: var(--gold);
+    text-underline-offset: 3px;
+  }
+</style>
