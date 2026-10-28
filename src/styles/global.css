@@ -294,13 +294,42 @@ svg {
   }
 }
 
+/* Mobilde faaliyet alanları ikili kalır; avukat kutuları tek sütun */
 @media (max-width: 40rem) {
   .tiles {
+    gap: 0.625rem;
+  }
+
+  .tiles.lawyers {
     grid-template-columns: 1fr;
   }
 
   .tile {
     min-height: 0;
+    gap: 0.5rem;
+    padding: 1.25rem 1rem 1rem;
+  }
+
+  .tile h2,
+  .tile h3 {
+    font-size: 1.3125rem;
+    overflow-wrap: break-word;
+  }
+
+  .tile p {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  /* Rusça kelimeler uzun; tireyle bölünmesin diye biraz küçülür */
+  :lang(ru) .tile h2,
+  :lang(ru) .tile h3 {
+    font-size: 1.125rem;
+  }
+
+  .tile__more {
+    padding-top: 0.5rem;
+    font-size: 0.8125rem;
   }
 }
 
