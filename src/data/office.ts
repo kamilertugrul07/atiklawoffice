@@ -19,6 +19,8 @@ export const office = {
   // Google Haritalar'daki büro kaydı ve gömülü harita için koordinat
   mapsLink: 'https://maps.app.goo.gl/pfhonBTgYxkQJw9p7',
   mapsCoords: '36.5511413,32.0081028',
+  // Google Haritalar'da ziyaretçinin konumundan ofise yol tarifi
+  directionsLink: 'https://www.google.com/maps/dir/?api=1&destination=36.5511413,32.0081028',
 };
 
 // Faaliyet alanı kimlikleri (src/i18n/content/*.ts içindeki practice.areas[].id ile aynı)

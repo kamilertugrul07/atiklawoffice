@@ -33,22 +33,6 @@ const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
   </div>
 </section>
 
-<section class="section">
-  <div class="wrap">
-    <h2 class="section-title">{a.principlesTitle}</h2>
-    <div class="principles">
-      {
-        a.principles.map((pr) => (
-          <div>
-            <h3>{pr.title}</h3>
-            <p>{pr.body}</p>
-          </div>
-        ))
-      }
-    </div>
-  </div>
-</section>
-
 <section class="section section--dark">
   <div class="wrap">
     <h2 class="section-title">{a.lawyersTitle}</h2>
@@ -68,6 +52,22 @@ const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
         ))
       }
     </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2 class="section-title">{a.principlesTitle}</h2>
+    <div class="principles">
+      {
+        a.principles.map((pr) => (
+          <div>
+            <h3>{pr.title}</h3>
+            <p>{pr.body}</p>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>
 
@@ -154,6 +154,17 @@ const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
 
   .principles p {
     color: var(--ink-muted);
+  }
+
+  @media (max-width: 40rem) {
+    .firm {
+      font-size: var(--step-0);
+      padding-top: 1.25rem;
+    }
+
+    .principles {
+      gap: 1.5rem;
+    }
   }
 
   .lawyers .tile {

@@ -307,9 +307,7 @@ export const tr = {
     lead: 'Atik Hukuk Bürosu, Alanya’da avukatlık ve arabuluculuk hizmetlerini bir arada sunar.',
     firmTitle: 'Büromuz',
     firm: [
-      'Büromuz, Antalya Barosuna kayıtlı avukatlarıyla Alanya’da faaliyet gösterir. Şirketlere ve bireylere hukuki danışmanlık verir; dava ve icra takiplerinde temsil eder.',
-      'Her uyuşmazlığın mahkemede çözülmesi gerekmediğine inanıyoruz. Bu nedenle avukatlık hizmetinin yanında, tarafları ortak bir çözümde buluşturan arabuluculuk hizmetini de sunuyoruz.',
-      'Alanya’nın uluslararası yapısını göz önünde bulundurarak yabancı uyruklu kişi ve şirketlerle de çalışıyor; görüşmeleri ofisimizde ya da çevrim içi yapıyoruz.',
+      'Büromuz, Antalya Barosuna kayıtlı avukatlarıyla Alanya’da şirketlere ve bireylere hukuki danışmanlık verir; dava ve icra takiplerinde temsil eder. Avukatlığın yanında, tarafları ortak bir çözümde buluşturan arabuluculuk hizmeti de sunar. Yabancı uyruklu kişi ve şirketlerle de çalışır; görüşmeler ofiste ya da çevrim içi yapılır.',
     ],
     principlesTitle: 'Çalışma ilkelerimiz',
     principles: [

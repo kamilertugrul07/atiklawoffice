@@ -44,6 +44,7 @@ export const ui = {
       title: 'Davada temsil, masada çözüm.',
       lead: 'Alanya’da avukatlık ve arabuluculuk bir arada: şirketlere ve bireylere hukuki danışmanlık, davalarda temsil ve uyuşmazlıkları mahkemeye taşımadan çözmek için arabuluculuk. Ofisimizde ya da çevrim içi.',
       secondary: 'Faaliyet alanları',
+      directions: 'Yol tarifi',
     },
     intro: {
       title: 'Arabuluculuk, iki tarafın birlikte karar verdiği yoldur.',
@@ -81,6 +82,7 @@ export const ui = {
       title: 'Representation in court, resolution at the table.',
       lead: 'Legal practice and mediation under one roof in Alanya: advice for companies and individuals, representation in litigation, and mediation to settle disputes without going to court. At our office or online.',
       secondary: 'Practice areas',
+      directions: 'Directions',
     },
     intro: {
       title: 'Mediation is the path where both sides decide together.',
@@ -118,6 +120,7 @@ export const ui = {
       title: 'Защита в суде, решение за столом переговоров.',
       lead: 'Адвокатская практика и медиация в Аланье: консультации для компаний и частных лиц, представительство в суде и медиация, чтобы урегулировать спор без обращения в суд. В нашем офисе или онлайн.',
       secondary: 'Направления практики',
+      directions: 'Как добраться',
     },
     intro: {
       title: 'Медиация — это путь, на котором стороны решают вместе.',

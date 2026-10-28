@@ -1,5 +1,6 @@
 ---
 import { path, t, type Lang } from '../i18n/ui';
+import { office } from '../data/office';
 import { logoA, logoRing, logoRingWidth, logoRule, logoTik } from '../data/logo';
 
 interface Props {
@@ -26,6 +27,13 @@ const tikBox = { x: 455, y: 170, width: 640, height: 195 };
       <div class="hero__actions">
         <a class="btn btn--solid" href={path(lang, 'contact')}>{s.cta}</a>
         <a class="btn btn--ghost" href={path(lang, 'practice')}>{s.hero.secondary}</a>
+        <a class="btn btn--ghost btn--directions" href={office.directionsLink} target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11Z"></path>
+            <circle cx="12" cy="10" r="2.3"></circle>
+          </svg>
+          {s.hero.directions}
+        </a>
       </div>
     </div>
 
@@ -112,6 +120,18 @@ const tikBox = { x: 455, y: 170, width: 640, height: 195 };
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .btn--directions {
+    gap: 0.55rem;
+  }
+
+  .btn--directions svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.5;
   }
 
   .converge {

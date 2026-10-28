@@ -16,110 +16,181 @@ const mediator = team.find((p) => p.isMediator)!;
 
 <PageHead title={m.title} lead={m.lead} />
 
+<!-- Başlıklar görünür, içerik tıklayınca açılır; sayfa kısa kalır -->
 <section class="section">
-  <div class="wrap split">
-    <h2 class="section-title">{m.whyTitle}</h2>
-    <div class="grid-2">
-      {
-        m.why.map((w) => (
-          <div>
-            <h3>{w.title}</h3>
-            <p>{w.body}</p>
+  <div class="wrap">
+    <div class="folds">
+      <details class="fold" id="neden">
+        <summary><h2>{m.whyTitle}</h2></summary>
+        <div class="fold__body grid-2">
+          {
+            m.why.map((w) => (
+              <div>
+                <h3>{w.title}</h3>
+                <p>{w.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </details>
+
+      <details class="fold" id="ihtiyari">
+        <summary><h2>{m.voluntaryTitle}</h2></summary>
+        <div class="fold__body">
+          <p class="voluntary-lead">{m.voluntaryLead}</p>
+          <div class="voluntary">
+            {
+              m.voluntary.map((v) => (
+                <article>
+                  <h3>{v.title}</h3>
+                  <p>{v.body}</p>
+                </article>
+              ))
+            }
           </div>
-        ))
-      }
+        </div>
+      </details>
+
+      <details class="fold" id="kapsam">
+        <summary><h2>{m.scopeTitle}</h2></summary>
+        <div class="fold__body">
+          <ul class="scope">
+            {m.scope.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="scope-note">{m.scopeNote}</p>
+        </div>
+      </details>
+
+      <details class="fold" id="surec">
+        <summary><h2>{m.processTitle}</h2></summary>
+        <div class="fold__body">
+          <ol class="process">
+            {
+              m.process.map((step) => (
+                <li>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </details>
+
+      <details class="fold" id="zorunlu">
+        <summary><h2>{m.mandatoryTitle}</h2></summary>
+        <div class="fold__body">
+          <p class="mandatory-lead">{m.mandatoryLead}</p>
+          <table class="mandatory">
+            <tbody>
+              {
+                m.mandatory.map((row) => (
+                  <tr>
+                    <th scope="row">
+                      {row.title}
+                      <span>{row.basis}</span>
+                    </th>
+                    <td>
+                      <span class="visually-label">{m.durationLabel}</span>
+                      {row.duration}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </details>
     </div>
   </div>
 </section>
 
-<section class="section section--dark">
-  <div class="wrap">
-    <div class="split">
-      <h2 class="section-title">{m.voluntaryTitle}</h2>
-      <p class="voluntary-lead">{m.voluntaryLead}</p>
-    </div>
-    <div class="voluntary">
-      {
-        m.voluntary.map((v) => (
-          <article>
-            <h3>{v.title}</h3>
-            <p>{v.body}</p>
-          </article>
-        ))
-      }
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap split">
-    <h2 class="section-title">{m.scopeTitle}</h2>
-    <div>
-      <ul class="scope">
-        {m.scope.map((item) => <li>{item}</li>)}
-      </ul>
-      <p class="scope-note">{m.scopeNote}</p>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap">
-    <h2 class="section-title">{m.processTitle}</h2>
-    <ol class="process">
-      {
-        m.process.map((step) => (
-          <li>
-            <h3>{step.title}</h3>
-            <p>{step.body}</p>
-          </li>
-        ))
-      }
-    </ol>
-  </div>
-</section>
-
-<section class="section">
+<section class="section mediator-band">
   <div class="wrap split mediator">
     <div>
       <h2 class="section-title">{m.mediatorTitle}</h2>
       <p class="note">{m.mediatorNote}</p>
     </div>
-    <div>
+    <div class="mediator__card">
       <TeamCard lawyer={mediator} lang={lang} />
       <a class="btn btn--solid cta" href={path(lang, 'contact')}>{s.cta}</a>
     </div>
   </div>
 </section>
 
-<section class="section mandatory-band">
-  <div class="wrap split">
-    <div>
-      <h2 class="section-title">{m.mandatoryTitle}</h2>
-      <p class="mandatory-lead">{m.mandatoryLead}</p>
-    </div>
-    <table class="mandatory">
-      <tbody>
-        {
-          m.mandatory.map((row) => (
-            <tr>
-              <th scope="row">
-                {row.title}
-                <span>{row.basis}</span>
-              </th>
-              <td>
-                <span class="visually-label">{m.durationLabel}</span>
-                {row.duration}
-              </td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
-  </div>
-</section>
-
 <style>
+  .folds {
+    max-width: 62rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  .fold {
+    border-top: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  .fold summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: clamp(1.1rem, 2.5vw, 1.75rem);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .fold summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .fold summary h2 {
+    font-size: var(--step-3);
+    font-weight: 450;
+  }
+
+  /* Artı işareti açılınca çarpıya döner */
+  .fold summary::after {
+    content: '+';
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    color: var(--gold);
+    font-size: 1.25rem;
+    line-height: 1;
+    transition:
+      transform 0.25s,
+      background-color 0.25s,
+      color 0.25s;
+  }
+
+  .fold[open] summary::after {
+    transform: rotate(45deg);
+    background: var(--gold);
+    color: #fff;
+  }
+
+  .fold summary:hover h2 {
+    color: var(--petrol-700);
+  }
+
+  .fold__body {
+    padding-bottom: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  @media (max-width: 40rem) {
+    .fold summary h2 {
+      font-size: var(--step-2);
+    }
+
+    .fold summary::after {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
   h3 {
     font-size: var(--step-2);
     margin-bottom: 0.6rem;
@@ -137,16 +208,15 @@ const mediator = team.find((p) => p.isMediator)!;
   }
 
   .voluntary-lead {
-    max-width: 36rem;
-    font-size: var(--step-1);
-    font-weight: 330;
+    max-width: 40rem;
+    color: var(--ink-muted);
   }
 
   .voluntary {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 2rem;
-    margin-top: clamp(2rem, 6vw, 4rem);
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
   }
 
   .voluntary article {
@@ -154,13 +224,9 @@ const mediator = team.find((p) => p.isMediator)!;
     border-top: 1px solid var(--gold);
   }
 
-  .voluntary h3 {
-    color: #f3f3f2;
-  }
-
   .voluntary p {
     font-size: var(--step--1);
-    color: var(--silver);
+    color: var(--ink-muted);
   }
 
   .scope {
@@ -233,16 +299,20 @@ const mediator = team.find((p) => p.isMediator)!;
     margin-top: 2.5rem;
   }
 
-  /* Zorunlu arabuluculuk: ikincil bilgi, sade bir tablo */
-  .section.mandatory-band {
+  /* Arabulucu kartı kendi zemininde; üst boşluğu korunur */
+  .section.mediator-band {
     background: var(--limestone-200);
     padding-top: var(--section-y);
   }
 
+  .mediator-band :global(dl) {
+    border-top-color: color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
   .mandatory-lead {
-    margin-top: 1rem;
+    margin-bottom: 1.25rem;
     color: var(--ink-muted);
-    max-width: 30rem;
+    max-width: 36rem;
   }
 
   .mandatory {
@@ -334,3 +404,16 @@ const mediator = team.find((p) => p.isMediator)!;
     }
   }
 </style>
+
+<script>
+  // Bağlantı bir bölümü gösteriyorsa (#surec gibi) o bölüm açık gelir
+  function openFromHash() {
+    const target = location.hash && document.querySelector<HTMLDetailsElement>(`details${location.hash}`);
+    if (target) {
+      target.open = true;
+      target.scrollIntoView();
+    }
+  }
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+</script>
