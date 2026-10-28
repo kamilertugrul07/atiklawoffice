@@ -16,11 +16,75 @@ const mediator = team.find((p) => p.isMediator)!;
 
 <PageHead title={m.title} lead={m.lead} />
 
-<!-- Başlıklar görünür, içerik tıklayınca açılır; sayfa kısa kalır -->
-<section class="section">
+<!-- Bilgisayarda: bölümler alt alta açık -->
+<section class="section desktop-only">
+  <div class="wrap split">
+    <h2 class="section-title">{m.whyTitle}</h2>
+    <div class="grid-2">
+      {
+        m.why.map((w) => (
+          <div>
+            <h3>{w.title}</h3>
+            <p>{w.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark desktop-only">
+  <div class="wrap">
+    <div class="split">
+      <h2 class="section-title">{m.voluntaryTitle}</h2>
+      <p class="voluntary-lead">{m.voluntaryLead}</p>
+    </div>
+    <div class="voluntary">
+      {
+        m.voluntary.map((v) => (
+          <article>
+            <h3>{v.title}</h3>
+            <p>{v.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section desktop-only">
+  <div class="wrap split">
+    <h2 class="section-title">{m.scopeTitle}</h2>
+    <div>
+      <ul class="scope">
+        {m.scope.map((item) => <li>{item}</li>)}
+      </ul>
+      <p class="scope-note">{m.scopeNote}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section desktop-only">
+  <div class="wrap" id="surec">
+    <h2 class="section-title">{m.processTitle}</h2>
+    <ol class="process">
+      {
+        m.process.map((step) => (
+          <li>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- Telefonda: başlıklar görünür, içerik tıklayınca açılır -->
+<section class="section mobile-only">
   <div class="wrap">
     <div class="folds">
-      <details class="fold" id="neden">
+      <details class="fold" data-fold="neden">
         <summary><h2>{m.whyTitle}</h2></summary>
         <div class="fold__body grid-2">
           {
@@ -34,7 +98,7 @@ const mediator = team.find((p) => p.isMediator)!;
         </div>
       </details>
 
-      <details class="fold" id="ihtiyari">
+      <details class="fold" data-fold="ihtiyari">
         <summary><h2>{m.voluntaryTitle}</h2></summary>
         <div class="fold__body">
           <p class="voluntary-lead">{m.voluntaryLead}</p>
@@ -51,7 +115,7 @@ const mediator = team.find((p) => p.isMediator)!;
         </div>
       </details>
 
-      <details class="fold" id="kapsam">
+      <details class="fold" data-fold="kapsam">
         <summary><h2>{m.scopeTitle}</h2></summary>
         <div class="fold__body">
           <ul class="scope">
@@ -61,7 +125,7 @@ const mediator = team.find((p) => p.isMediator)!;
         </div>
       </details>
 
-      <details class="fold" id="surec">
+      <details class="fold" data-fold="surec">
         <summary><h2>{m.processTitle}</h2></summary>
         <div class="fold__body">
           <ol class="process">
@@ -77,7 +141,7 @@ const mediator = team.find((p) => p.isMediator)!;
         </div>
       </details>
 
-      <details class="fold" id="zorunlu">
+      <details class="fold" data-fold="zorunlu">
         <summary><h2>{m.mandatoryTitle}</h2></summary>
         <div class="fold__body">
           <p class="mandatory-lead">{m.mandatoryLead}</p>
@@ -115,6 +179,33 @@ const mediator = team.find((p) => p.isMediator)!;
       <TeamCard lawyer={mediator} lang={lang} />
       <a class="btn btn--solid cta" href={path(lang, 'contact')}>{s.cta}</a>
     </div>
+  </div>
+</section>
+
+<section class="section mandatory-band desktop-only">
+  <div class="wrap split">
+    <div>
+      <h2 class="section-title">{m.mandatoryTitle}</h2>
+      <p class="mandatory-lead">{m.mandatoryLead}</p>
+    </div>
+    <table class="mandatory">
+      <tbody>
+        {
+          m.mandatory.map((row) => (
+            <tr>
+              <th scope="row">
+                {row.title}
+                <span>{row.basis}</span>
+              </th>
+              <td>
+                <span class="visually-label">{m.durationLabel}</span>
+                {row.duration}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
   </div>
 </section>
 
@@ -208,7 +299,15 @@ const mediator = team.find((p) => p.isMediator)!;
   }
 
   .voluntary-lead {
+    max-width: 36rem;
+    font-size: var(--step-1);
+    font-weight: 330;
+  }
+
+  .fold .voluntary-lead {
     max-width: 40rem;
+    font-size: var(--step-0);
+    font-weight: inherit;
     color: var(--ink-muted);
   }
 
@@ -216,7 +315,7 @@ const mediator = team.find((p) => p.isMediator)!;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 2rem;
-    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+    margin-top: clamp(1.5rem, 6vw, 4rem);
   }
 
   .voluntary article {
@@ -224,8 +323,16 @@ const mediator = team.find((p) => p.isMediator)!;
     border-top: 1px solid var(--gold);
   }
 
+  .section--dark .voluntary h3 {
+    color: #f3f3f2;
+  }
+
   .voluntary p {
     font-size: var(--step--1);
+    color: var(--silver);
+  }
+
+  .fold .voluntary p {
     color: var(--ink-muted);
   }
 
@@ -299,20 +406,49 @@ const mediator = team.find((p) => p.isMediator)!;
     margin-top: 2.5rem;
   }
 
-  /* Arabulucu kartı kendi zemininde; üst boşluğu korunur */
-  .section.mediator-band {
+  /* Zorunlu arabuluculuk: ikincil bilgi, sade bir tablo */
+  .section.mandatory-band {
     background: var(--limestone-200);
     padding-top: var(--section-y);
   }
 
-  .mediator-band :global(dl) {
-    border-top-color: color-mix(in srgb, var(--ink) 15%, transparent);
+  .mandatory-lead {
+    margin-top: 1rem;
+    color: var(--ink-muted);
+    max-width: 30rem;
   }
 
-  .mandatory-lead {
+  .fold .mandatory-lead {
+    margin-top: 0;
     margin-bottom: 1.25rem;
-    color: var(--ink-muted);
     max-width: 36rem;
+  }
+
+  /* Aynı içerik iki düzende: bilgisayarda bölümler, telefonda açılır liste */
+  .mobile-only {
+    display: none;
+  }
+
+  @media (max-width: 40rem) {
+    .desktop-only {
+      display: none;
+    }
+
+    /* Gizli bilgisayar bölümlerinden sonra geldiği için üst boşluğu elle verilir */
+    .section.mobile-only {
+      display: block;
+      padding-top: var(--section-y);
+    }
+
+    /* Telefonda arabulucu kartı kendi zemininde */
+    .section.mediator-band {
+      background: var(--limestone-200);
+      padding-top: var(--section-y);
+    }
+
+    .mediator-band :global(dl) {
+      border-top-color: color-mix(in srgb, var(--ink) 15%, transparent);
+    }
   }
 
   .mandatory {
@@ -406,10 +542,11 @@ const mediator = team.find((p) => p.isMediator)!;
 </style>
 
 <script>
-  // Bağlantı bir bölümü gösteriyorsa (#surec gibi) o bölüm açık gelir
+  // Telefonda bağlantı bir bölümü gösteriyorsa (#surec gibi) o bölüm açık gelir
   function openFromHash() {
-    const target = location.hash && document.querySelector<HTMLDetailsElement>(`details${location.hash}`);
-    if (target) {
+    const key = location.hash.slice(1);
+    const target = key && document.querySelector<HTMLDetailsElement>(`details[data-fold="${key}"]`);
+    if (target && target.offsetParent !== null) {
       target.open = true;
       target.scrollIntoView();
     }
