@@ -115,6 +115,26 @@ const a = office.address;
     font-size: 0.8125rem;
   }
 
+  /* Telefonda menü ve avukat listesi yan yana iki sütun */
+  @media (max-width: 40rem) {
+    .site-footer {
+      padding-block: 2.5rem 1.5rem;
+    }
+
+    .grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem 1.25rem;
+    }
+
+    .grid > div {
+      grid-column: 1 / -1;
+    }
+
+    .legal {
+      margin-top: 2rem;
+    }
+  }
+
   .legal p {
     display: flex;
     flex-wrap: wrap;

@@ -161,6 +161,26 @@ const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
     gap: 1rem;
   }
 
+  /* Telefonda kutu tek satır: harf simgesi solda, ad ve unvan sağda */
+  @media (max-width: 40rem) {
+    .lawyers .tile {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 1rem;
+      row-gap: 0.15rem;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .lawyers .tile > :global(.monogram) {
+      grid-row: span 3;
+    }
+
+    .lawyers .tile .tile__more {
+      padding-top: 0.35rem;
+    }
+  }
+
   .lawyer-facts {
     margin-top: 2rem;
   }

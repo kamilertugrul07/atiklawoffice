@@ -146,7 +146,7 @@ const mediator = team.find((p) => p.isMediator)!;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 2rem;
-    margin-top: clamp(3rem, 6vw, 4rem);
+    margin-top: clamp(2rem, 6vw, 4rem);
   }
 
   .voluntary article {
@@ -236,7 +236,7 @@ const mediator = team.find((p) => p.isMediator)!;
   /* Zorunlu arabuluculuk: ikincil bilgi, sade bir tablo */
   .section.mandatory-band {
     background: var(--limestone-200);
-    padding-top: clamp(4rem, 9vw, 7rem);
+    padding-top: var(--section-y);
   }
 
   .mandatory-lead {
@@ -303,9 +303,21 @@ const mediator = team.find((p) => p.isMediator)!;
   @media (max-width: 40rem) {
     .grid-2,
     .voluntary,
-    .process,
     .scope {
       grid-template-columns: 1fr;
+    }
+
+    /* Dört adım telefonda ikili kalır */
+    .process {
+      gap: 1.75rem 1.25rem;
+    }
+
+    .process li {
+      padding-top: 2.75rem;
+    }
+
+    .process li::before {
+      top: 0.75rem;
     }
 
     .mandatory tr {

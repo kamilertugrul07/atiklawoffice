@@ -73,10 +73,10 @@ const tikBox = { x: 455, y: 170, width: 640, height: 195 };
     display: grid;
     grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
     align-items: center;
-    gap: clamp(2rem, 4vw, 4rem);
+    gap: clamp(1.25rem, 4vw, 4rem);
     min-height: 100svh;
-    padding-top: calc(var(--header-h) + 2rem);
-    padding-bottom: 4rem;
+    padding-top: calc(var(--header-h) + 1rem);
+    padding-bottom: 3rem;
   }
 
   .hero__text {
@@ -86,12 +86,12 @@ const tikBox = { x: 455, y: 170, width: 640, height: 195 };
 
   /* EN ve RU başlıklar daha uzun */
   :global(html:is([lang='en'], [lang='ru'])) h1 {
-    font-size: clamp(2.5rem, 5.2vw, 4.75rem);
+    font-size: clamp(2rem, 5.2vw, 4.75rem);
   }
 
   h1 {
     max-width: 15ch;
-    font-size: clamp(2.75rem, 6.2vw, 5.75rem);
+    font-size: clamp(2.375rem, 6.2vw, 5.75rem);
     font-weight: 450;
     line-height: 0.98;
     letter-spacing: -0.015em;
@@ -100,7 +100,7 @@ const tikBox = { x: 455, y: 170, width: 640, height: 195 };
 
   .hero__lead {
     max-width: 34rem;
-    margin-top: 2rem;
+    margin-top: clamp(1.25rem, 3vw, 2rem);
     font-size: var(--step-1);
     line-height: 1.55;
     font-weight: 330;
@@ -111,7 +111,7 @@ const tikBox = { x: 455, y: 170, width: 640, height: 195 };
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 2.75rem;
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
   }
 
   .converge {

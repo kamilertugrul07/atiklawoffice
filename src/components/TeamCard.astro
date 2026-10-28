@@ -85,4 +85,37 @@ const a = c(lang).about;
     text-decoration-color: var(--gold);
     text-underline-offset: 3px;
   }
+
+  /* Ana sayfa önizlemesi telefonda yan yana: harf simgesi solda, ad sağda */
+  @media (max-width: 40rem) {
+    .person:not(.person--compact) {
+      grid-template-columns: 4.5rem 1fr;
+      align-items: center;
+      gap: 0 1rem;
+    }
+
+    .person:not(.person--compact) > :global(.monogram) {
+      width: 4.5rem;
+      align-self: start;
+    }
+
+    .person:not(.person--compact) > :global(.monogram span) {
+      font-size: 1.5rem;
+    }
+
+    .person--compact {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .person--compact h3 {
+      font-size: var(--step-1);
+    }
+
+    .person--compact .role {
+      margin-top: 0.1rem;
+      font-size: var(--step--1);
+    }
+  }
 </style>
