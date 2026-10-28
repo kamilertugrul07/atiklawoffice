@@ -1,9 +1,11 @@
 ---
-// Yazı detay sayfası (yalnızca "yazılar" bölümü altında)
+// Alt sayfaların detayları: yazılar (/tr/yazilar/<yazı>/) ve avukatlar (/tr/hakkimizda/<avukat>/)
 import { getCollection, render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import PageHead from '../../../components/PageHead.astro';
-import { routes, t, type Lang } from '../../../i18n/ui';
+import LawyerPage from '../../../components/pages/LawyerPage.astro';
+import { team, type Lawyer } from '../../../data/office';
+import { langs, routes, t, type Lang } from '../../../i18n/ui';
 import { c } from '../../../i18n/content';
 import { articleLang, articleSlug, formatDate, type Article } from '../../../lib/articles';
 
@@ -13,7 +15,7 @@ export async function getStaticPaths() {
     const l = articleLang(e);
     return `/${l}/${routes.articles[l]}/${articleSlug(e)}/`;
   };
-  return all.map((entry) => {
+  const articlePaths = all.map((entry) => {
     const lang = articleLang(entry);
     // Aynı yazının diğer dillerdeki sürümleri; olmayan dilde yazılar listesine gidilir
     const alternates = Object.fromEntries(
@@ -24,14 +26,46 @@ export async function getStaticPaths() {
       props: { entry, alternates },
     };
   });
+
+  const lawyerPaths = langs.flatMap((lang) =>
+    team.map((lawyer) => ({
+      params: { lang, section: routes.about[lang], slug: lawyer.slug },
+      props: {
+        lawyer,
+        alternates: Object.fromEntries(langs.map((l) => [l, `/${l}/${routes.about[l]}/${lawyer.slug}/`])),
+      },
+    })),
+  );
+
+  return [...articlePaths, ...lawyerPaths];
 }
 
-const { entry, alternates } = Astro.props as { entry: Article; alternates: Partial<Record<Lang, string>> };
+type Props = { alternates: Partial<Record<Lang, string>> } & ({ entry: Article } | { lawyer: Lawyer });
+const props = Astro.props as Props;
+const { alternates } = props;
 const lang = Astro.params.lang as Lang;
 const a = c(lang).articles;
-const { Content } = await render(entry);
+const entry = 'entry' in props ? props.entry : undefined;
+const lawyer = 'lawyer' in props ? props.lawyer : undefined;
+const Content = entry ? (await render(entry)).Content : undefined;
+const lawyerName = lawyer && `${lawyer.isMediator ? 'Av. Arb.' : 'Av.'} ${lawyer.name}`;
 ---
 
+{
+  lawyer && (
+    <Base
+      lang={lang}
+      routeKey="about"
+      alternates={alternates}
+      title={`${lawyerName} | ${t(lang).firmName}`}
+      description={`${lawyerName}, ${lawyer.title[lang]}. ${t(lang).firmName}.`}
+    >
+      <LawyerPage lang={lang} lawyer={lawyer} />
+    </Base>
+  )
+}
+
+{entry && Content && (
 <Base
   lang={lang}
   routeKey="articles"
@@ -54,6 +88,7 @@ const { Content } = await render(entry);
     </div>
   </article>
 </Base>
+)}
 
 <style>
   time {

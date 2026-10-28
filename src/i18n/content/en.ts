@@ -321,6 +321,7 @@ export const en: Content = {
     bar: 'Bar',
     email: 'Email',
     phone: 'Phone',
+    back: 'All lawyers',
     close: 'Close',
   },
 

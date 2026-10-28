@@ -45,6 +45,10 @@ type Localized = { tr: string; en: string; ru: string };
 
 export type Lawyer = {
   name: string;
+  // Avukat sayfasının adresi: /tr/hakkimizda/<slug>/
+  slug: string;
+  // public/ altındaki fotoğraf yolu (ör. '/team/ibrahim-atik.jpg'); boşsa baş harfler gösterilir
+  photo: string;
   title: Localized;
   university: string;
   email: string;
@@ -63,6 +67,8 @@ const noBio = { tr: '', en: '', ru: '' };
 export const team: Lawyer[] = [
   {
     name: 'İbrahim Atik',
+    slug: 'ibrahim-atik',
+    photo: '',
     title: { tr: 'Avukat & Arabulucu', en: 'Attorney & Mediator', ru: 'Адвокат и медиатор' },
     university: 'Selçuk Üniversitesi Hukuk Fakültesi',
     email: 'av.ibrahimatik@gmail.com',
@@ -73,6 +79,8 @@ export const team: Lawyer[] = [
   },
   {
     name: 'Bihter Gönültaş',
+    slug: 'bihter-gonultas',
+    photo: '',
     title: attorney,
     university: 'Erzurum Üniversitesi Hukuk Fakültesi',
     email: '',
@@ -83,6 +91,8 @@ export const team: Lawyer[] = [
   },
   {
     name: 'İnci Atik',
+    slug: 'inci-atik',
+    photo: '',
     title: attorney,
     university: 'Hasan Kalyoncu Üniversitesi Hukuk Fakültesi',
     email: '',

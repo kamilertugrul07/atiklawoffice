@@ -1,0 +1,233 @@
+---
+// Avukat sayfası: solda fotoğraf, sağda özgeçmiş ve bilgiler
+import Monogram from '../Monogram.astro';
+import type { Lawyer } from '../../data/office';
+import { path, t, type Lang } from '../../i18n/ui';
+import { areaTitle, c } from '../../i18n/content';
+
+interface Props {
+  lang: Lang;
+  lawyer: Lawyer;
+}
+const { lang, lawyer } = Astro.props;
+const s = t(lang);
+const a = c(lang).about;
+const fullName = `${lawyer.isMediator ? 'Av. Arb.' : 'Av.'} ${lawyer.name}`;
+---
+
+<section class="lawyer-head">
+  <div class="wrap lawyer__grid">
+    <div class="head">
+      <a class="back" href={path(lang, 'about')}>{a.back}</a>
+      <h1>{fullName}</h1>
+      <p class="role">{lawyer.title[lang]}</p>
+    </div>
+  </div>
+</section>
+
+<section class="lawyer">
+  <div class="wrap lawyer__grid">
+    <figure class="photo">
+      {
+        lawyer.photo ? (
+          <img src={lawyer.photo} alt={fullName} width="800" height="1000" />
+        ) : (
+          <div class="photo__empty">
+            <Monogram name={lawyer.name} />
+          </div>
+        )
+      }
+    </figure>
+
+    <div class="cv">
+      {
+        lawyer.bio[lang] && (
+          <>
+            <h2 class="sheet__label">{a.cvTitle}</h2>
+            <div class="bio">
+              {lawyer.bio[lang].split('\n\n').map((para) => <p>{para}</p>)}
+            </div>
+          </>
+        )
+      }
+
+      {
+        lawyer.areas.length > 0 && (
+          <>
+            <h2 class="sheet__label">{a.areasTitle}</h2>
+            <ul class="sheet__list">
+              {lawyer.areas.map((id) => (
+                <li>{areaTitle(lang, id)}</li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+
+      <dl class="sheet__facts facts">
+        <div>
+          <dt>{a.education}</dt>
+          <dd>{lawyer.university}</dd>
+        </div>
+        <div>
+          <dt>{a.bar}</dt>
+          <dd>{s.footer.bar}</dd>
+        </div>
+        {
+          lawyer.email && (
+            <div>
+              <dt>{a.email}</dt>
+              <dd>
+                <a href={`mailto:${lawyer.email}`}>{lawyer.email}</a>
+              </dd>
+            </div>
+          )
+        }
+        <div>
+          <dt>{a.phone}</dt>
+          <dd>{lawyer.phone}</dd>
+        </div>
+      </dl>
+
+      <a class="btn btn--solid cta" href={`${path(lang, 'contact')}?avukat=${encodeURIComponent(lawyer.name)}`}>
+        {s.cta}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Koyu üst bant: ad ve unvan; header bu bandın üzerinde durur */
+  .lawyer-head {
+    padding-top: calc(var(--header-h) + clamp(2rem, 5vw, 4rem));
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    background:
+      radial-gradient(ellipse 60% 90% at 85% 0%, var(--petrol-700) 0%, transparent 70%),
+      var(--petrol-800);
+    color: var(--silver);
+  }
+
+  /* Bant ve içerik aynı iki sütunu paylaşır: solda fotoğraf, sağda metin */
+  .lawyer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .head {
+    grid-column: 2;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    font-size: var(--step--1);
+    letter-spacing: 0.03em;
+    color: var(--silver-muted);
+    text-decoration: none;
+  }
+
+  .back::before {
+    content: '‹ ';
+    color: var(--gold);
+  }
+
+  .back:hover {
+    color: #fff;
+  }
+
+  h1 {
+    font-size: clamp(2.375rem, 4.6vw, 4.5rem);
+    font-weight: 450;
+    line-height: 1.02;
+    color: #f3f3f2;
+  }
+
+  .role {
+    margin-top: 0.75rem;
+    font-size: var(--step-1);
+    color: var(--gold-soft);
+  }
+
+  .lawyer {
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: var(--section-y);
+  }
+
+  /* Fotoğraf koyu banda doğru yukarı taşar */
+  .photo {
+    margin: calc(-1 * clamp(2.5rem, 5vw, 4rem) - 12rem) 0 0;
+    position: sticky;
+    top: 2rem;
+    aspect-ratio: 4 / 5;
+    background: var(--petrol-700);
+    border-bottom: 3px solid var(--gold);
+    overflow: hidden;
+  }
+
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo__empty {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(ellipse 80% 70% at 50% 40%, var(--petrol-700) 0%, transparent 75%),
+      var(--petrol-900);
+  }
+
+  .photo__empty :global(.monogram) {
+    width: 40%;
+  }
+
+  .photo__empty :global(.monogram span) {
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+  }
+
+  .cv > :first-child {
+    margin-top: 0;
+  }
+
+  .bio {
+    display: grid;
+    gap: 1rem;
+    max-width: 38rem;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--ink-muted);
+  }
+
+  .facts {
+    margin-top: 2.5rem;
+  }
+
+  .cv > .facts:first-child {
+    margin-top: 0;
+  }
+
+  .cta {
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 48rem) {
+    .lawyer__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .head {
+      grid-column: 1;
+    }
+
+    /* Telefonda fotoğraf bandın hemen altında, metnin üstünde */
+    .photo {
+      position: static;
+      width: min(100%, 20rem);
+      margin: 0 0 2rem;
+    }
+  }
+</style>

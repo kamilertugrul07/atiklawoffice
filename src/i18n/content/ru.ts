@@ -321,6 +321,7 @@ export const ru: Content = {
     bar: 'Коллегия',
     email: 'Эл. почта',
     phone: 'Телефон',
+    back: 'Все адвокаты',
     close: 'Закрыть',
   },
 

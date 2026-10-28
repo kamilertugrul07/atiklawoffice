@@ -323,6 +323,7 @@ export const tr = {
     bar: 'Baro',
     email: 'E-posta',
     phone: 'Telefon',
+    back: 'Tüm avukatlar',
     close: 'Kapat',
   },
 

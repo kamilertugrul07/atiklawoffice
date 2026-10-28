@@ -1,24 +1,15 @@
 ---
 import PageHead from '../PageHead.astro';
-import Sheet from '../Sheet.astro';
 import Monogram from '../Monogram.astro';
 import { team } from '../../data/office';
-import { path, t, type Lang } from '../../i18n/ui';
-import { areaTitle, c } from '../../i18n/content';
+import { path, type Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const s = t(lang);
 const a = c(lang).about;
-const slug = (name: string) =>
-  name
-    .toLocaleLowerCase('tr')
-    .normalize('NFD')
-    .replace(/[^a-z\s]/g, '')
-    .trim()
-    .replace(/\s+/g, '-');
 const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
 ---
 
@@ -40,14 +31,14 @@ const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
       {
         team.map((lawyer) => (
           <li>
-            <button class="tile" type="button" data-open={`lawyer-${slug(lawyer.name)}`} aria-haspopup="dialog">
+            <a class="tile" href={`${path(lang, 'about')}${lawyer.slug}/`}>
               <Monogram name={lawyer.name} size="sm" />
               <h3>
                 {honorific(lawyer.isMediator)} {lawyer.name}
               </h3>
               <p>{lawyer.title[lang]}</p>
               <span class="tile__more">{a.more}</span>
-            </button>
+            </a>
           </li>
         ))
       }
@@ -70,59 +61,6 @@ const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
     </div>
   </div>
 </section>
-
-{
-  team.map((lawyer) => (
-    <Sheet
-      id={`lawyer-${slug(lawyer.name)}`}
-      title={`${honorific(lawyer.isMediator)} ${lawyer.name}`}
-      subtitle={lawyer.title[lang]}
-      closeLabel={a.close}
-    >
-      {lawyer.bio[lang] && (
-        <>
-          <h3 class="sheet__label">{a.cvTitle}</h3>
-          <p class="sheet__lead">{lawyer.bio[lang]}</p>
-        </>
-      )}
-      {lawyer.areas.length > 0 && (
-        <>
-          <h3 class="sheet__label">{a.areasTitle}</h3>
-          <ul class="sheet__list">
-            {lawyer.areas.map((id) => (
-              <li>{areaTitle(lang, id)}</li>
-            ))}
-          </ul>
-        </>
-      )}
-      <dl class="sheet__facts lawyer-facts">
-        <div>
-          <dt>{a.education}</dt>
-          <dd>{lawyer.university}</dd>
-        </div>
-        <div>
-          <dt>{a.bar}</dt>
-          <dd>{s.footer.bar}</dd>
-        </div>
-        {lawyer.email && (
-          <div>
-            <dt>{a.email}</dt>
-            <dd>
-              <a href={`mailto:${lawyer.email}`}>{lawyer.email}</a>
-            </dd>
-          </div>
-        )}
-        <div>
-          <dt>{a.phone}</dt>
-          <dd>{lawyer.phone}</dd>
-        </div>
-      </dl>
-      <a class="btn btn--solid sheet__cta" href={`${path(lang, 'contact')}?avukat=${encodeURIComponent(lawyer.name)}`}>
-        {s.cta}
-      </a>
-    </Sheet>
-  ))
-}
 
 <style>
   .firm {
@@ -190,14 +128,6 @@ const honorific = (isMediator: boolean) => (isMediator ? 'Av. Arb.' : 'Av.');
     .lawyers .tile .tile__more {
       padding-top: 0.35rem;
     }
-  }
-
-  .lawyer-facts {
-    margin-top: 2rem;
-  }
-
-  .sheet__cta {
-    margin-top: 2rem;
   }
 
   @media (max-width: 50rem) {
