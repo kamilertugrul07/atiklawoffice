@@ -36,13 +36,13 @@ export const ui = {
     },
     cta: 'Görüşme talep edin',
     meta: {
-      title: 'Atik Hukuk Bürosu | Alanya',
+      title: 'Atik Hukuk Bürosu | Avukatlık ve Arabuluculuk',
       description:
-        'Alanya merkezli Atik Hukuk Bürosu: avukatlık, hukuki danışmanlık ve ticari, iş ve kira uyuşmazlıklarında arabuluculuk.',
+        'Atik Hukuk Bürosu: avukatlık, hukuki danışmanlık ve ticari, iş ve kira uyuşmazlıklarında arabuluculuk. Alanya’daki ofisimizde ya da çevrim içi.',
     },
     hero: {
       title: 'Davada temsil, masada çözüm.',
-      lead: 'Alanya’da avukatlık ve arabuluculuk bir arada: şirketlere ve bireylere hukuki danışmanlık, davalarda temsil ve uyuşmazlıkları mahkemeye taşımadan çözmek için arabuluculuk. Ofisimizde ya da çevrim içi.',
+      lead: 'Avukatlık ve arabuluculuk bir arada: şirketlere ve bireylere hukuki danışmanlık, davalarda temsil ve uyuşmazlıkları mahkemeye taşımadan çözmek için arabuluculuk. Nerede olursanız olun: Alanya’daki ofisimizde ya da çevrim içi.',
       secondary: 'Faaliyet alanları',
       directions: 'Yol tarifi',
     },
@@ -74,13 +74,13 @@ export const ui = {
     },
     cta: 'Request a meeting',
     meta: {
-      title: 'Atik Law Office | Alanya, Türkiye',
+      title: 'Atik Law Office | Law & Mediation',
       description:
-        'Atik Law Office in Alanya: mediation for commercial, employment and tenancy disputes; legal representation and advice.',
+        'Atik Law Office: legal representation and advice, and mediation for commercial, employment and tenancy disputes. At our office in Alanya or online.',
     },
     hero: {
       title: 'Representation in court, resolution at the table.',
-      lead: 'Legal practice and mediation under one roof in Alanya: advice for companies and individuals, representation in litigation, and mediation to settle disputes without going to court. At our office or online.',
+      lead: 'Legal practice and mediation under one roof: advice for companies and individuals, representation in litigation, and mediation to settle disputes without going to court. Wherever you are: at our office in Alanya or online.',
       secondary: 'Practice areas',
       directions: 'Directions',
     },
@@ -112,13 +112,13 @@ export const ui = {
     },
     cta: 'Запросить встречу',
     meta: {
-      title: 'Юридическая фирма Atik | Аланья, Турция',
+      title: 'Юридическая фирма Atik | Право и медиация',
       description:
-        'Юридическая фирма Atik в Аланье: медиация в коммерческих, трудовых и арендных спорах; юридическое представительство и консультации.',
+        'Юридическая фирма Atik: представительство, консультации и медиация в коммерческих, трудовых и арендных спорах. В офисе в Аланье или онлайн.',
     },
     hero: {
       title: 'Защита в суде, решение за столом переговоров.',
-      lead: 'Адвокатская практика и медиация в Аланье: консультации для компаний и частных лиц, представительство в суде и медиация, чтобы урегулировать спор без обращения в суд. В нашем офисе или онлайн.',
+      lead: 'Адвокатская практика и медиация в одном бюро: консультации для компаний и частных лиц, представительство в суде и медиация, чтобы урегулировать спор без обращения в суд. Где бы вы ни находились: в нашем офисе в Аланье или онлайн.',
       secondary: 'Направления практики',
       directions: 'Как добраться',
     },

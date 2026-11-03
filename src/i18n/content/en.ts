@@ -302,10 +302,10 @@ export const en: Content = {
 
   about: {
     title: 'About us',
-    lead: 'Atik Law Office provides legal practice and mediation under one roof in Alanya.',
+    lead: 'Atik Law Office provides legal practice and mediation under one roof.',
     firmTitle: 'Our office',
     firm: [
-      'Our office in Alanya brings together attorneys registered with the Antalya Bar Association. We advise companies and individuals and represent them in litigation and enforcement proceedings. Alongside legal practice, we offer mediation to help parties reach a shared solution. We also work with foreign nationals and companies, and meet at our office or online.',
+      'Our office brings together attorneys registered with the Antalya Bar Association. We advise companies and individuals and represent them in litigation and enforcement proceedings. Alongside legal practice, we offer mediation to help parties reach a shared solution. We also work with foreign nationals and companies, and meet at our office in Alanya or online.',
     ],
     principlesTitle: 'How we work',
     principles: [
