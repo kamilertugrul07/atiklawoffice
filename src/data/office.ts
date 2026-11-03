@@ -15,7 +15,7 @@ export const office = {
   kep: '',
   linkedin: '',
   // İletişim formu: web3forms.com'dan büro e-postasıyla alınan erişim anahtarı
-  web3formsKey: '',
+  web3formsKey: '1a27297c-f1cc-414b-a8f3-741aa3bb955f',
   // Google Haritalar'daki büro kaydı ve gömülü harita için koordinat
   mapsLink: 'https://maps.app.goo.gl/pfhonBTgYxkQJw9p7',
   mapsCoords: '36.5511413,32.0081028',
