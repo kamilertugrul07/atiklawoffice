@@ -1,8 +1,10 @@
 ---
 import PageHead from '../PageHead.astro';
-import Sheet from '../Sheet.astro';
+import { pageImage } from '../../lib/images';
+import AreaCard from '../AreaCard.astro';
 import { path, t, type Lang } from '../../i18n/ui';
 import { c } from '../../i18n/content';
+import { areaLinks } from '../../lib/areas';
 
 interface Props {
   lang: Lang;
@@ -11,52 +13,27 @@ const { lang } = Astro.props;
 const s = t(lang);
 const p = c(lang).practice;
 const m = c(lang).mediation;
+const links = await areaLinks(lang);
 ---
 
-<PageHead title={p.title} lead={p.lead} />
+<PageHead title={p.title} lead={p.lead} image={pageImage('practice')} />
 
 <section class="section">
   <div class="wrap">
-    <ul class="tiles">
+    <ul class="cards">
       {
         p.areas.map((area) => (
-          <li>
-            <button class="tile" type="button" data-open={`area-${area.id}`} aria-haspopup="dialog">
-              <h2>{area.title}</h2>
-              <p>{area.summary}</p>
-              <span class="tile__more">{p.more}</span>
-            </button>
-          </li>
+          <AreaCard id={area.id} title={area.title} items={area.items} href={links[area.id]} />
         ))
       }
     </ul>
+    <div class="unsure">
+      <h2>{p.unsure.title}</h2>
+      <p>{p.unsure.lead}</p>
+      <a class="btn btn--solid" href={path(lang, 'contact')}>{s.cta}</a>
+    </div>
   </div>
 </section>
-
-{
-  p.areas.map((area) => (
-    <Sheet id={`area-${area.id}`} title={area.title} closeLabel={p.close}>
-      <p class="sheet__lead">{area.summary}</p>
-      <h3 class="sheet__label">{p.scopeLabel}</h3>
-      <ul class="sheet__list">
-        {area.items.map((item) => (
-          <li>{item}</li>
-        ))}
-      </ul>
-      <h3 class="sheet__label">{p.factsLabel}</h3>
-      <dl class="sheet__facts">
-        {area.facts.map((f) => (
-          <div>
-            <dt>{f.label}</dt>
-            <dd>{f.value}</dd>
-          </div>
-        ))}
-      </dl>
-      <p class="sheet__note">{p.note}</p>
-      <a class="btn btn--solid" href={`${path(lang, 'contact')}?konu=${area.id}`}>{s.cta}</a>
-    </Sheet>
-  ))
-}
 
 <section class="section section--dark">
   <div class="wrap split">
@@ -72,6 +49,60 @@ const m = c(lang).mediation;
 </section>
 
 <style>
+  .cards {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.75rem 1.5rem;
+  }
+
+  /* Kartların altında, tüm genişlikte */
+  .unsure {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem 2rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding: 1.75rem 2.25rem;
+    background: var(--petrol-800);
+    color: var(--silver);
+  }
+
+  .unsure h2 {
+    font-size: var(--step-2);
+    color: #f3f3f2;
+  }
+
+  .unsure p {
+    max-width: 40ch;
+    font-size: var(--step--1);
+    color: var(--silver-muted);
+  }
+
+  @media (max-width: 64rem) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .unsure {
+      grid-template-columns: 1fr;
+      justify-items: start;
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .cards {
+      gap: 1.75rem 0.75rem;
+    }
+
+    .unsure {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+
   .mediation-lead {
     max-width: 36rem;
     font-size: var(--step-1);

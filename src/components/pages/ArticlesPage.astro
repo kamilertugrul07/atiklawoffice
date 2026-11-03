@@ -1,5 +1,6 @@
 ---
 import PageHead from '../PageHead.astro';
+import { pageImage } from '../../lib/images';
 import { routes, type Lang } from '../../i18n/ui';
 import { c } from '../../i18n/content';
 import { articleSlug, articlesFor, formatDate } from '../../lib/articles';
@@ -12,7 +13,7 @@ const a = c(lang).articles;
 const list = await articlesFor(lang);
 ---
 
-<PageHead title={a.title} lead={a.lead} />
+<PageHead title={a.title} lead={a.lead} image={pageImage('articles')} />
 
 <section class="section">
   <div class="wrap">

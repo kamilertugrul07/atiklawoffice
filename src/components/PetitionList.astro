@@ -1,0 +1,102 @@
+---
+// Dilekçe örnekleri listesi (Dilekçeler sayfası ve faaliyet alanı sayfaları)
+import type { Lang } from '../i18n/ui';
+import { c } from '../i18n/content';
+import { petitionHref, petitionInfo, type Petition } from '../lib/petitions';
+
+interface Props {
+  lang: Lang;
+  petitions: Petition[];
+}
+const { lang, petitions } = Astro.props;
+const r = c(lang).resources;
+---
+
+<ul class="petitions">
+  {
+    petitions.map((p) => {
+      const info = petitionInfo(p, lang);
+      return (
+        <li>
+          <a href={petitionHref(p, lang)}>
+            <span class="petitions__title">{info.title}</span>
+            <span class="petitions__summary">{info.summary}</span>
+            <span class="petitions__time">
+              {r.deadline}: {info.deadline.label}
+            </span>
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .petitions {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .petitions a {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    height: 100%;
+    padding: 1.5rem 1.6rem;
+    background: #f7f7f4;
+    border: 1px solid var(--limestone-200);
+    border-top: 2px solid var(--limestone-200);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      border-color 0.25s,
+      background-color 0.25s;
+  }
+
+  .petitions a:hover {
+    background: #fff;
+    border-top-color: var(--gold);
+  }
+
+  .petitions__title {
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    line-height: 1.15;
+  }
+
+  .petitions__summary {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  .petitions__time {
+    justify-self: start;
+    margin-top: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    background: #fdecea;
+    border-left: 3px solid #b3261e;
+    color: #8c1d16;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  @media (max-width: 50rem) {
+    .petitions {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .petitions a {
+      padding: 1.1rem 1.1rem 1.2rem;
+    }
+
+    .petitions__title {
+      font-size: 1.25rem;
+    }
+  }
+</style>

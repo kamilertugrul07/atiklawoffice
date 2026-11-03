@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# dilekçe Word/PDF dosyaları derleme sırasında üretilir
+public/indir/

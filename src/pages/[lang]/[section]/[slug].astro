@@ -1,13 +1,19 @@
 ---
-// Alt sayfaların detayları: yazılar (/tr/yazilar/<yazı>/) ve avukatlar (/tr/hakkimizda/<avukat>/)
+// Alt sayfaların detayları: makaleler (/tr/makaleler/<makale>/), avukatlar (/tr/hakkimizda/<avukat>/)
+// faaliyet alanları (/tr/faaliyet-alanlari/<alan>/) ve dilekçe örnekleri (/tr/dilekceler/<dilekçe>/)
 import { getCollection, render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import PageHead from '../../../components/PageHead.astro';
 import LawyerPage from '../../../components/pages/LawyerPage.astro';
+import AreaPage from '../../../components/pages/AreaPage.astro';
+import PetitionPage from '../../../components/pages/PetitionPage.astro';
 import { team, type Lawyer } from '../../../data/office';
 import { langs, routes, t, type Lang } from '../../../i18n/ui';
 import { c } from '../../../i18n/content';
 import { articleLang, articleSlug, formatDate, type Article } from '../../../lib/articles';
+import { areaEntryLang, areaEntrySlug, areaHref, type AreaEntry } from '../../../lib/areas';
+import { petitionHref, petitionInfo, type Petition } from '../../../lib/petitions';
+import { pageImage } from '../../../lib/images';
 
 export async function getStaticPaths() {
   const all = await getCollection('articles');
@@ -17,7 +23,7 @@ export async function getStaticPaths() {
   };
   const articlePaths = all.map((entry) => {
     const lang = articleLang(entry);
-    // Aynı yazının diğer dillerdeki sürümleri; olmayan dilde yazılar listesine gidilir
+    // Aynı makalenin diğer dillerdeki sürümleri; olmayan dilde makaleler listesine gidilir
     const alternates = Object.fromEntries(
       all.filter((e) => e.data.key === entry.data.key).map((e) => [articleLang(e), href(e)]),
     );
@@ -37,19 +43,81 @@ export async function getStaticPaths() {
     })),
   );
 
-  return [...articlePaths, ...lawyerPaths];
+  // Aynı alanın diğer dillerdeki sayfası; henüz yazılmamışsa o dilin faaliyet alanları sayfası
+  const areas = await getCollection('areas');
+  const areaPaths = areas.map((entry) => {
+    const lang = areaEntryLang(entry);
+    const alternates = Object.fromEntries(
+      areas.filter((e) => e.data.key === entry.data.key).map((e) => [areaEntryLang(e), areaHref(e)]),
+    );
+    return {
+      params: { lang, section: routes.practice[lang], slug: areaEntrySlug(entry) },
+      props: { area: entry, alternates },
+    };
+  });
+
+  // Dilekçeler her dilde aynı adresle yayımlanır; metin Türkçe, açıklamalar o dilde
+  const petitions = await getCollection('petitions');
+  const petitionPaths = langs.flatMap((lang) =>
+    petitions.map((entry) => ({
+      params: { lang, section: routes.resources[lang], slug: entry.id },
+      props: {
+        petition: entry,
+        alternates: Object.fromEntries(langs.map((l) => [l, petitionHref(entry, l)])),
+      },
+    })),
+  );
+
+  return [...articlePaths, ...lawyerPaths, ...areaPaths, ...petitionPaths];
 }
 
-type Props = { alternates: Partial<Record<Lang, string>> } & ({ entry: Article } | { lawyer: Lawyer });
+type Props = { alternates: Partial<Record<Lang, string>> } & (
+  | { entry: Article }
+  | { lawyer: Lawyer }
+  | { area: AreaEntry }
+  | { petition: Petition }
+);
 const props = Astro.props as Props;
 const { alternates } = props;
 const lang = Astro.params.lang as Lang;
 const a = c(lang).articles;
 const entry = 'entry' in props ? props.entry : undefined;
 const lawyer = 'lawyer' in props ? props.lawyer : undefined;
+const area = 'area' in props ? props.area : undefined;
+const areaInfo = area && c(lang).practice.areas.find((x) => x.id === area.data.key);
+const petition = 'petition' in props ? props.petition : undefined;
+const petitionText = petition && petitionInfo(petition, lang);
 const Content = entry ? (await render(entry)).Content : undefined;
 const lawyerName = lawyer && `${lawyer.isMediator ? 'Av. Arb.' : 'Av.'} ${lawyer.name}`;
 ---
+
+{
+  petition && petitionText && (
+    <Base
+      lang={lang}
+      routeKey="resources"
+      alternates={alternates}
+      title={`${petitionText.title} | ${t(lang).firmName}`}
+      description={petitionText.summary}
+    >
+      <PetitionPage lang={lang} entry={petition} />
+    </Base>
+  )
+}
+
+{
+  area && areaInfo && (
+    <Base
+      lang={lang}
+      routeKey="practice"
+      alternates={alternates}
+      title={`${areaInfo.title} | ${t(lang).firmName}`}
+      description={areaInfo.summary}
+    >
+      <AreaPage lang={lang} entry={area} />
+    </Base>
+  )
+}
 
 {
   lawyer && (
@@ -73,7 +141,7 @@ const lawyerName = lawyer && `${lawyer.isMediator ? 'Av. Arb.' : 'Av.'} ${lawyer
   title={`${entry.data.title} | ${t(lang).firmName}`}
   description={entry.data.description}
 >
-  <PageHead title={entry.data.title}>
+  <PageHead title={entry.data.title} image={pageImage('articles')}>
     <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date, lang)}</time>
   </PageHead>
 

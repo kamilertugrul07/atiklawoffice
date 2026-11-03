@@ -10,7 +10,7 @@ interface Props {
   routeKey?: RouteKey;
   title?: string;
   description?: string;
-  // Sayfanın diğer dillerdeki adresleri (yazılar gibi routeKey ile bulunamayan sayfalar için)
+  // Sayfanın diğer dillerdeki adresleri (makaleler gibi routeKey ile bulunamayan sayfalar için)
   alternates?: Partial<Record<Lang, string>>;
 }
 const { lang, routeKey, title, description } = Astro.props;

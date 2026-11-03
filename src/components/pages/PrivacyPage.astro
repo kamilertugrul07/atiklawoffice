@@ -1,5 +1,6 @@
 ---
 import PageHead from '../PageHead.astro';
+import { pageImage } from '../../lib/images';
 import { type Lang } from '../../i18n/ui';
 import { c } from '../../i18n/content';
 
@@ -10,7 +11,7 @@ const { lang } = Astro.props;
 const p = c(lang).privacy;
 ---
 
-<PageHead title={p.title} lead={p.lead} />
+<PageHead title={p.title} lead={p.lead} image={pageImage('privacy')} />
 
 <section class="section">
   <div class="wrap">

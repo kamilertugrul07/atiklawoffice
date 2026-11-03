@@ -7,14 +7,15 @@ export const routes = {
   mediation: { tr: 'arabuluculuk', en: 'mediation', ru: 'mediatsiya' },
   practice: { tr: 'faaliyet-alanlari', en: 'practice-areas', ru: 'napravleniya' },
   about: { tr: 'hakkimizda', en: 'about', ru: 'o-nas' },
-  articles: { tr: 'yazilar', en: 'articles', ru: 'stati' },
+  resources: { tr: 'dilekceler', en: 'petitions', ru: 'zayavleniya' },
+  articles: { tr: 'makaleler', en: 'articles', ru: 'stati' },
   contact: { tr: 'iletisim', en: 'contact', ru: 'kontakty' },
   privacy: { tr: 'kvkk', en: 'privacy', ru: 'konfidentsialnost' },
 } as const;
 export type RouteKey = keyof typeof routes;
 
 // Üst menüde görünen sayfalar
-export const navKeys = ['mediation', 'practice', 'about', 'articles', 'contact'] as const;
+export const navKeys = ['mediation', 'practice', 'about', 'resources', 'articles', 'contact'] as const;
 
 export function path(lang: Lang, key?: RouteKey) {
   return key ? `/${lang}/${routes[key][lang]}/` : `/${lang}/`;
@@ -28,10 +29,12 @@ export const ui = {
     menu: 'Menü',
     close: 'Kapat',
     nav: {
+      home: 'Ana sayfa',
       mediation: 'Arabuluculuk',
       practice: 'Faaliyet alanları',
       about: 'Hakkımızda',
-      articles: 'Yazılar',
+      resources: 'Dilekçeler',
+      articles: 'Makaleler',
       contact: 'İletişim',
     },
     cta: 'Görüşme talep edin',
@@ -41,16 +44,19 @@ export const ui = {
         'Atik Hukuk Bürosu: avukatlık, hukuki danışmanlık ve ticari, iş ve kira uyuşmazlıklarında arabuluculuk. Alanya’daki ofisimizde ya da çevrim içi.',
     },
     hero: {
-      title: 'Davada temsil, masada çözüm.',
-      lead: 'Avukatlık ve arabuluculuk bir arada: şirketlere ve bireylere hukuki danışmanlık, davalarda temsil ve uyuşmazlıkları mahkemeye taşımadan çözmek için arabuluculuk. Nerede olursanız olun: Alanya’daki ofisimizde ya da çevrim içi.',
+      title: 'Hakkın olduğu yerde\nçaresi de vardır.',
+      lead: 'O çare bazen bir dava, bazen bir masada varılan anlaşmadır. Kimi zaman mahkemede aranır, kimi zaman karşılıklı oturulan bir masada bulunur. Avukatlık ve arabuluculukla iki yolda da yanınızdayız.',
       secondary: 'Faaliyet alanları',
       directions: 'Yol tarifi',
     },
     intro: {
       title: 'Arabuluculuk, iki tarafın birlikte karar verdiği yoldur.',
-      body: [
-        'Arabuluculukta karar bir hâkime bırakılmaz. Tarafsız bir arabulucu, tarafların birbirini dinlemesini ve kendi çözümlerini bulmasını kolaylaştırır. Görüşmeler gizlidir; anlaşma sağlanırsa imzalanan belge, mahkeme kararı gibi uygulanabilir.',
-        'Arabuluculuk yalnızca kanunun zorunlu tuttuğu durumlara özgü değildir. Ticari, ailevi ya da komşuluk ilişkisinden doğan pek çok uyuşmazlıkta taraflar arabulucuya kendi istekleriyle başvurabilir; dava açılmış olsa bile bu yol açıktır.',
+      lead: 'Hakkın olduğu yerde çare de vardır; bazen o çare bir masadadır. Tarafsız bir arabulucu, tarafların birbirini dinlemesini ve kendi çözümlerini bulmasını kolaylaştırır.',
+      points: [
+        { title: 'Gizlilik', text: 'Masada konuşulanlar masada kalır; anlaşma olmazsa davada delil olarak kullanılamaz.' },
+        { title: 'İrade', text: 'Sonucu taraflar belirler; kimse istemediği bir çözüme zorlanmaz.' },
+        { title: 'Süreklilik', text: 'Ticari, ailevi ya da komşuluk ilişkisi uyuşmazlıktan sonra da sürebilir.' },
+        { title: 'Esneklik', text: 'Görüşmeler ofiste ya da çevrim içi yapılır; dava sürerken de başvurulabilir.' },
       ],
     },
     whatsapp: { label: 'WhatsApp ile yazın', text: 'Merhaba, görüşme talebinde bulunmak istiyorum.' },
@@ -66,9 +72,11 @@ export const ui = {
     menu: 'Menu',
     close: 'Close',
     nav: {
+      home: 'Home',
       mediation: 'Mediation',
       practice: 'Practice areas',
       about: 'About us',
+      resources: 'Petitions',
       articles: 'Articles',
       contact: 'Contact',
     },
@@ -79,16 +87,19 @@ export const ui = {
         'Atik Law Office: legal representation and advice, and mediation for commercial, employment and tenancy disputes. At our office in Alanya or online.',
     },
     hero: {
-      title: 'Representation in court, resolution at the table.',
-      lead: 'Legal practice and mediation under one roof: advice for companies and individuals, representation in litigation, and mediation to settle disputes without going to court. Wherever you are: at our office in Alanya or online.',
+      title: 'Where there is a right,\nthere is a remedy.',
+      lead: 'That remedy is sometimes a lawsuit, sometimes an agreement reached at the table. At times it is sought in court; at times it is found when both sides sit down face to face. With legal practice and mediation, we stand by you on both paths.',
       secondary: 'Practice areas',
       directions: 'Directions',
     },
     intro: {
       title: 'Mediation is the path where both sides decide together.',
-      body: [
-        'In mediation, the decision is not left to a judge. An impartial mediator helps the parties listen to each other and find their own solution. Sessions are confidential, and a signed settlement can be enforced like a court judgment.',
-        'Mediation is not limited to cases where the law requires it. In many disputes arising from business, family or neighbourly relations, the parties can turn to a mediator voluntarily, even after a lawsuit has been filed.',
+      lead: 'Where there is a right, there is a remedy; sometimes that remedy is found at a table. An impartial mediator helps the parties listen to each other and find their own solution.',
+      points: [
+        { title: 'Confidentiality', text: 'What is said at the table stays at the table; if no agreement is reached, it cannot be used as evidence in court.' },
+        { title: 'Autonomy', text: 'The parties decide the outcome; no one is pressed into a solution they do not want.' },
+        { title: 'Continuity', text: 'Business, family or neighbourly relationships can continue after the dispute.' },
+        { title: 'Flexibility', text: 'Sessions take place at our office or online, and mediation is possible even during a lawsuit.' },
       ],
     },
     whatsapp: { label: 'Message us on WhatsApp', text: 'Hello, I would like to request a meeting.' },
@@ -104,9 +115,11 @@ export const ui = {
     menu: 'Меню',
     close: 'Закрыть',
     nav: {
+      home: 'Главная',
       mediation: 'Медиация',
       practice: 'Направления',
       about: 'О нас',
+      resources: 'Заявления',
       articles: 'Статьи',
       contact: 'Контакты',
     },
@@ -117,16 +130,19 @@ export const ui = {
         'Юридическая фирма Atik: представительство, консультации и медиация в коммерческих, трудовых и арендных спорах. В офисе в Аланье или онлайн.',
     },
     hero: {
-      title: 'Защита в суде, решение за столом переговоров.',
-      lead: 'Адвокатская практика и медиация в одном бюро: консультации для компаний и частных лиц, представительство в суде и медиация, чтобы урегулировать спор без обращения в суд. Где бы вы ни находились: в нашем офисе в Аланье или онлайн.',
+      title: 'Где есть право,\nтам есть и защита.',
+      lead: 'Иногда это судебный процесс, иногда соглашение, достигнутое за столом переговоров. Порой его ищут в суде, порой находят, сев друг напротив друга за один стол. Адвокатская практика и медиация: мы рядом с вами на обоих путях.',
       secondary: 'Направления практики',
       directions: 'Как добраться',
     },
     intro: {
       title: 'Медиация — это путь, на котором стороны решают вместе.',
-      body: [
-        'В медиации решение не принимает судья. Беспристрастный медиатор помогает сторонам услышать друг друга и найти собственное решение. Переговоры конфиденциальны, а подписанное соглашение исполняется как решение суда.',
-        'Медиация применяется не только там, где её требует закон. Во многих спорах, возникающих из деловых, семейных или соседских отношений, стороны могут обратиться к медиатору добровольно — даже после подачи иска.',
+      lead: 'Где есть право, там есть и защита; порой её находят за столом переговоров. Беспристрастный медиатор помогает сторонам услышать друг друга и найти собственное решение.',
+      points: [
+        { title: 'Конфиденциальность', text: 'Сказанное за столом остаётся за столом; если соглашение не достигнуто, это нельзя использовать как доказательство в суде.' },
+        { title: 'Воля сторон', text: 'Результат определяют стороны; никого не принуждают к решению, которого он не хочет.' },
+        { title: 'Сохранение отношений', text: 'Деловые, семейные или соседские отношения могут продолжиться и после спора.' },
+        { title: 'Гибкость', text: 'Встречи проходят в офисе или онлайн; к медиации можно обратиться и во время судебного процесса.' },
       ],
     },
     whatsapp: { label: 'Написать в WhatsApp', text: 'Здравствуйте! Хочу записаться на встречу.' },

@@ -1,0 +1,369 @@
+---
+// Dilekçe örneği sayfası: açıklama, süre kutusu ve indirme bağlantıları, kullanım adımları,
+// kâğıt görünümünde Türkçe dilekçe metni. EN ve RU sayfalarda yalnız açıklamalar çevrilidir.
+import { marked } from 'marked';
+import PageHead from '../PageHead.astro';
+import { path, t, type Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+import { petitionDownload, petitionInfo, type Petition } from '../../lib/petitions';
+import { formatDate } from '../../lib/articles';
+import { petitionImage } from '../../lib/images';
+
+interface Props {
+  lang: Lang;
+  entry: Petition;
+}
+const { lang, entry } = Astro.props;
+const s = t(lang);
+const r = c(lang).resources;
+const g = r.page;
+const info = petitionInfo(entry, lang);
+const download = petitionDownload(entry);
+const contact = entry.data.area ? `${path(lang, 'contact')}?konu=${entry.data.area}` : path(lang, 'contact');
+
+// İndirilen dosyalarla aynı Markdown; boşluklar sayfada vurgulanır
+const sheet = (await marked.parse(entry.body ?? ''))
+  .replace(/\[([^\]<>]*)\]/g, '<mark>[$1]</mark>')
+  // Sayfanın kendi h1'i var; kâğıttaki ilk satır paragraf, bölüm başlıkları h3 olur
+  .replace(/<h1>(.*?)<\/h1>/, '<p class="addr">$1</p>')
+  .replace(/<h2>(.*?)<\/h2>/g, '<h3>$1</h3>');
+---
+
+<PageHead title={info.title} lead={info.summary} image={petitionImage(entry.id)}>
+  <nav class="crumbs" aria-label={g.crumb}>
+    <a href={path(lang, 'resources')}>{g.crumb}</a>
+    {lang !== 'tr' && <span lang="tr">{entry.data.title}</span>}
+  </nav>
+</PageHead>
+
+<section class="section">
+  <div class="wrap layout">
+    <aside class="side">
+      <div class="deadline" role="note">
+        <p class="deadline__k">{r.deadline}</p>
+        <p class="deadline__v">{info.deadline.label}</p>
+        <p>{info.deadline.detail}</p>
+        <a href={`${path(lang, 'resources')}#hesapla`}>{r.calc.link}</a>
+      </div>
+      <div class="downloads">
+        <a class="btn btn--solid" href={`${download}.docx`} download>{g.word}</a>
+        <a class="btn btn--line" href={`${download}.pdf`} download>{g.pdf}</a>
+      </div>
+      <dl class="facts">
+        <div>
+          <dt>{g.authority}</dt>
+          <dd>{info.authority}</dd>
+        </div>
+        <div>
+          <dt>{g.law}</dt>
+          <dd>{entry.data.law}</dd>
+        </div>
+        <div>
+          <dt>{g.updated}</dt>
+          <dd>{formatDate(entry.data.updated, lang)}</dd>
+        </div>
+      </dl>
+    </aside>
+
+    <div class="main">
+      <section class="how" aria-labelledby="how-title">
+        <h2 id="how-title">{g.stepsTitle}</h2>
+        <ol>{info.steps.map((st) => <li>{st}</li>)}</ol>
+      </section>
+
+      <section aria-labelledby="text-title">
+        <div class="text-bar">
+          <h2 id="text-title">{g.textTitle}</h2>
+          <button class="btn btn--line" type="button" data-copy data-done={g.copied} data-fail={g.copyFailed}>
+            {g.copy}
+          </button>
+        </div>
+        {g.turkishOnly && <p class="tr-note">{g.turkishOnly}</p>}
+        <div class="paper" lang="tr" data-paper set:html={sheet} />
+      </section>
+
+      <p class="disclaimer">{g.disclaimer}</p>
+
+      <div class="help">
+        <h2>{g.helpTitle}</h2>
+        <p>{g.helpText}</p>
+        <a class="btn btn--solid" href={contact}>{s.cta}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin-top: 1.75rem;
+    font-size: var(--step--1);
+    color: var(--silver-muted);
+  }
+
+  .crumbs a {
+    color: var(--gold-soft);
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .side {
+    position: sticky;
+    top: 1.5rem;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .deadline {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.4rem 1.5rem;
+    background: #fdecea;
+    border-left: 4px solid #b3261e;
+    color: #5c1410;
+    font-size: var(--step--1);
+  }
+
+  .deadline__k {
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .deadline__v {
+    font-family: var(--font-serif);
+    font-size: var(--step-3);
+    line-height: 1.05;
+    color: #8c1d16;
+  }
+
+  .deadline a {
+    justify-self: start;
+    color: #8c1d16;
+    text-underline-offset: 3px;
+  }
+
+  .downloads {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .downloads .btn {
+    justify-content: center;
+  }
+
+  /* Açık zeminde çerçeveli düğme */
+  .btn--line {
+    background: none;
+    color: var(--ink);
+    border-color: var(--ink);
+    cursor: pointer;
+  }
+
+  .btn--line:hover {
+    background: var(--petrol-800);
+    border-color: var(--petrol-800);
+    color: #fff;
+  }
+
+  .facts {
+    margin: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .facts dt {
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  .facts dd {
+    margin: 0.15rem 0 0;
+  }
+
+  .main {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    min-width: 0;
+  }
+
+  .how {
+    padding: 1.6rem 1.75rem;
+    background: #f7f7f4;
+    border: 1px solid var(--limestone-200);
+    border-top: 2px solid var(--gold);
+  }
+
+  .how h2,
+  .text-bar h2 {
+    font-size: var(--step-2);
+  }
+
+  .how ol {
+    margin: 1rem 0 0;
+    padding-left: 1.3em;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .how li::marker {
+    color: var(--gold);
+  }
+
+  .text-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .tr-note {
+    margin-bottom: 1rem;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  /* Dilekçe, indirilen dosya gibi bir kâğıt sayfası olarak dizilir */
+  .paper {
+    padding: clamp(1.5rem, 6vw, 4.5rem) clamp(1.25rem, 6vw, 5rem);
+    background: #fff;
+    border: 1px solid var(--limestone-200);
+    color: #111;
+    font:
+      1.0625rem/1.75 'Times New Roman',
+      Tinos,
+      Times,
+      serif;
+  }
+
+  .paper :global(.addr) {
+    margin-bottom: 2.2em;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .paper :global(h3) {
+    margin: 1.6em 0 0.4em;
+    font: inherit;
+    font-weight: 700;
+  }
+
+  .paper :global(p) {
+    margin: 0 0 0.7em;
+    text-align: justify;
+  }
+
+  .paper :global(ol) {
+    list-style: none;
+    padding: 0;
+    counter-reset: p;
+  }
+
+  .paper :global(ol li) {
+    counter-increment: p;
+    margin-bottom: 0.7em;
+    text-indent: 2em;
+    text-align: justify;
+  }
+
+  .paper :global(ol li::before) {
+    content: counter(p) '. ';
+  }
+
+  .paper :global(ol li p) {
+    display: inline;
+  }
+
+  .paper :global(blockquote) {
+    width: max-content;
+    max-width: 100%;
+    margin: 2.5em 0 0 auto;
+    text-align: center;
+  }
+
+  .paper :global(blockquote p) {
+    margin: 0;
+    text-align: center;
+  }
+
+  .paper :global(mark) {
+    padding: 0 0.1em;
+    background: #fff1a8;
+    color: inherit;
+  }
+
+  .disclaimer {
+    max-width: 72ch;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  .help {
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    background: var(--petrol-800);
+    color: var(--silver);
+  }
+
+  .help h2 {
+    font-size: var(--step-3);
+    color: #f3f3f2;
+  }
+
+  .help p {
+    color: var(--silver-muted);
+  }
+
+  @media (max-width: 60rem) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .side {
+      position: static;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .paper {
+      font-size: 0.9375rem;
+    }
+
+    .paper :global(ol li) {
+      text-indent: 1.25em;
+    }
+  }
+</style>
+
+<script>
+  // Dilekçe, paragraf aralarıyla birlikte düz metin olarak kopyalanır
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const label = btn.textContent;
+    btn.addEventListener('click', async () => {
+      const text = document.querySelector<HTMLElement>('[data-paper]')?.innerText ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = btn.dataset.done!;
+      } catch {
+        btn.textContent = btn.dataset.fail!;
+      }
+      setTimeout(() => (btn.textContent = label), 2400);
+    });
+  });
+</script>

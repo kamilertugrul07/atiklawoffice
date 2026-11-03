@@ -1,17 +1,38 @@
 ---
-// Alt sayfaların koyu üst bandı; header bu bandın üzerinde durur
+// Alt sayfaların koyu üst bandı; header bu bandın üzerinde durur.
+// Fotoğraf verilirse sağ tarafta durur (alan sayfalarındaki üst bantla aynı düzen).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
   title: string;
   lead?: string;
+  image?: ImageMetadata;
 }
-const { title, lead } = Astro.props;
+const { title, lead, image } = Astro.props;
 ---
 
-<section class="page-head">
-  <div class="wrap">
-    <h1>{title}</h1>
-    {lead && <p>{lead}</p>}
-    <slot />
+<section class:list={['page-head', { 'page-head--image': image }]}>
+  <div class="wrap page-head__inner">
+    <div>
+      <h1>{title}</h1>
+      {lead && <p>{lead}</p>}
+      <slot />
+    </div>
+    {
+      image && (
+        <div class="page-head__ph">
+          <Image
+            src={image}
+            alt=""
+            widths={[480, 720, 960]}
+            sizes="(max-width: 50rem) 92vw, 34vw"
+            quality={74}
+            loading="eager"
+          />
+        </div>
+      )
+    }
   </div>
 </section>
 
@@ -23,6 +44,27 @@ const { title, lead } = Astro.props;
     color: var(--silver);
     padding-top: calc(var(--header-h) + clamp(2rem, 9vw, 7rem));
     padding-bottom: clamp(2.25rem, 7vw, 5.5rem);
+  }
+
+  .page-head--image {
+    padding-top: calc(var(--header-h) + clamp(2rem, 6vw, 4.5rem));
+    padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .page-head--image .page-head__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  /* Fotoğraf süs niteliğinde; sayfanın konusu başlıkta yazılı */
+  .page-head__ph img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
   }
 
   h1 {
@@ -42,5 +84,19 @@ const { title, lead } = Astro.props;
     font-size: var(--step-1);
     line-height: 1.55;
     font-weight: 330;
+  }
+
+  @media (max-width: 50rem) {
+    .page-head--image .page-head__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .page-head__ph {
+      order: -1;
+    }
+
+    .page-head__ph img {
+      aspect-ratio: 3 / 2;
+    }
   }
 </style>

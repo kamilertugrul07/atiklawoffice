@@ -1,5 +1,6 @@
 ---
 import PageHead from '../PageHead.astro';
+import { pageImage } from '../../lib/images';
 import { office, team } from '../../data/office';
 import { path, t, type Lang } from '../../i18n/ui';
 import { c } from '../../i18n/content';
@@ -16,7 +17,7 @@ const mapEmbed = `https://www.google.com/maps?q=${office.mapsCoords}&z=17&output
 const mapLink = office.mapsLink;
 ---
 
-<PageHead title={k.title} lead={k.lead} />
+<PageHead title={k.title} lead={k.lead} image={pageImage('contact')} />
 
 <section class="section">
   <div class="wrap contact">

@@ -1,0 +1,123 @@
+---
+// Fotoğraflı faaliyet alanı kartı (ana sayfa ve faaliyet alanları sayfası).
+// Fotoğraf süs niteliğinde; başlık hemen altında olduğu için alt metni boş.
+import { Image } from 'astro:assets';
+import { areaImage } from '../lib/areas';
+
+interface Props {
+  id: string;
+  title: string;
+  items: string[];
+  // Sayfası henüz yazılmamış alanda kart bağlantısız durur
+  href?: string;
+  dark?: boolean;
+}
+const { id, title, items, href, dark = false } = Astro.props;
+const image = areaImage(id);
+const Tag = href ? 'a' : 'div';
+---
+
+<li class:list={['card', { 'card--dark': dark }]}>
+  <Tag class="card__link" href={href}>
+    {
+      image && (
+        <div class="card__ph">
+          <Image
+            src={image}
+            alt=""
+            widths={[360, 540, 720]}
+            sizes="(max-width: 40rem) 46vw, (max-width: 64rem) 46vw, 23vw"
+            quality={72}
+          />
+        </div>
+      )
+    }
+    <h3>{title}</h3>
+    <ul class="card__items">
+      {items.slice(0, 3).map((item) => <li>{item}</li>)}
+    </ul>
+  </Tag>
+</li>
+
+<style>
+  .card {
+    display: grid;
+  }
+
+  .card__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card__ph {
+    overflow: hidden;
+    background: var(--petrol-900);
+  }
+
+  .card__ph img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  h3 {
+    margin: 1.1rem 0 0.5rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--gold);
+    font-size: var(--step-2);
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  .card__items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--ink-muted);
+  }
+
+  .card--dark h3 {
+    color: #f3f3f2;
+  }
+
+  .card--dark .card__items {
+    color: var(--silver-muted);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    a.card__link:hover img {
+      transform: scale(1.04);
+    }
+
+    a.card__link:hover h3 {
+      text-decoration: underline;
+      text-decoration-color: var(--gold);
+      text-underline-offset: 0.18em;
+      text-decoration-thickness: 0.05em;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    h3 {
+      margin-top: 0.75rem;
+      padding-top: 0.6rem;
+      font-size: 1.1875rem;
+      overflow-wrap: break-word;
+    }
+
+    :lang(ru) h3 {
+      font-size: 1.0625rem;
+    }
+
+    .card__items {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+  }
+</style>

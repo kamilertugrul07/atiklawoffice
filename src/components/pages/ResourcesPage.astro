@@ -1,0 +1,50 @@
+---
+// Dilekçeler: süre hesaplayıcı ve dilekçe örnekleri listesi
+import PageHead from '../PageHead.astro';
+import { pageImage } from '../../lib/images';
+import DeadlineCalc from '../DeadlineCalc.astro';
+import PetitionList from '../PetitionList.astro';
+import type { Lang } from '../../i18n/ui';
+import { c } from '../../i18n/content';
+import { petitionsFor } from '../../lib/petitions';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const r = c(lang).resources;
+const petitions = await petitionsFor();
+---
+
+<PageHead title={r.title} lead={r.lead} image={pageImage('resources')} />
+
+<section class="section" id="hesapla">
+  <div class="wrap">
+    <DeadlineCalc lang={lang} />
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="split">
+      <h2 class="section-title">{r.petitionsTitle}</h2>
+      <p class="lead">{r.petitionsLead}</p>
+    </div>
+    <PetitionList lang={lang} petitions={petitions} />
+  </div>
+</section>
+
+<style>
+  #hesapla {
+    scroll-margin-top: 1rem;
+  }
+
+  .lead {
+    max-width: 36rem;
+    color: var(--ink-muted);
+  }
+
+  .split {
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+  }
+</style>

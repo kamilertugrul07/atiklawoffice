@@ -27,7 +27,8 @@
 
   --gutter: clamp(1rem, 4vw, 3.5rem);
   --max: 78rem;
-  --header-h: 5rem;
+  /* Büyük logo için masaüstünde yüksek, mobilde alçak üst bar */
+  --header-h: clamp(5rem, 12.5vw, 11.25rem);
   --section-y: clamp(4rem, 9vw, 7rem);
 }
 

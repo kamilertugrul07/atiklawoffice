@@ -29,9 +29,11 @@ export type AreaId =
   | 'mediation-voluntary'
   | 'mediation-mandatory'
   | 'corporate'
+  | 'administrative'
   | 'contracts'
   | 'enforcement'
   | 'employment'
+  | 'union'
   | 'realestate'
   | 'immigration'
   | 'citizenship'
@@ -64,7 +66,20 @@ export type Lawyer = {
 const attorney = { tr: 'Avukat', en: 'Attorney', ru: 'Адвокат' };
 const noBio = { tr: '', en: '', ru: '' };
 
+// Sıra sitede her yerde aynıdır: İnci, İbrahim, Bihter
 export const team: Lawyer[] = [
+  {
+    name: 'İnci Atik',
+    slug: 'inci-atik',
+    photo: '',
+    title: attorney,
+    university: 'Hasan Kalyoncu Üniversitesi Hukuk Fakültesi',
+    email: '',
+    phone: office.phone,
+    isMediator: false,
+    bio: noBio,
+    areas: [],
+  },
   {
     name: 'İbrahim Atik',
     slug: 'ibrahim-atik',
@@ -83,18 +98,6 @@ export const team: Lawyer[] = [
     photo: '',
     title: attorney,
     university: 'Erzurum Üniversitesi Hukuk Fakültesi',
-    email: '',
-    phone: office.phone,
-    isMediator: false,
-    bio: noBio,
-    areas: [],
-  },
-  {
-    name: 'İnci Atik',
-    slug: 'inci-atik',
-    photo: '',
-    title: attorney,
-    university: 'Hasan Kalyoncu Üniversitesi Hukuk Fakültesi',
     email: '',
     phone: office.phone,
     isMediator: false,
