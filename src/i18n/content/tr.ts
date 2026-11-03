@@ -3,6 +3,12 @@
 
 export const tr = {
   home: {
+    kicker: 'Hukuk & Arabuluculuk',
+    introLink: 'Arabuluculuk hakkında',
+    motto: 'Ubi ius, ibi remedium',
+    mottoNote: 'Roma hukukunun bu ilkesi, büromuzun çalışma anlayışıdır.',
+    panelPetitions: '{n} örnek · Word ve PDF',
+    panelArticles: 'Bilgilendirici makaleler',
     practiceTitle: 'Faaliyet alanları',
     practiceLead:
       'Arabuluculuğun yanında şirketlere ve bireylere avukatlık ve hukuki danışmanlık hizmeti veriyoruz.',
@@ -334,16 +340,18 @@ export const tr = {
 
   about: {
     title: 'Hakkımızda',
-    lead: 'Atik Hukuk Bürosu, avukatlık ve arabuluculuk hizmetlerini bir arada sunar.',
+    lead: 'Hukuk, insanın derdine çare olduğunda anlam kazanır. Büromuz bu inançla çalışır.',
     firmTitle: 'Büromuz',
     firm: [
-      'Büromuz, Antalya Barosuna kayıtlı avukatlarıyla şirketlere ve bireylere hukuki danışmanlık verir; dava ve icra takiplerinde temsil eder. Avukatlığın yanında, tarafları ortak bir çözümde buluşturan arabuluculuk hizmeti de sunar. Yabancı uyruklu kişi ve şirketlerle de çalışır; görüşmeler Alanya’daki ofisimizde ya da çevrim içi yapılır.',
+      'Atik Hukuk Bürosu, hukukun yalnızca kanun maddelerinden ibaret olmadığı inancıyla çalışır. Her dosyanın ardında bir insanın hikâyesi, bir ailenin geleceği ya da yıllarca emek verilmiş bir iş durur. Kimi zaman bu hakkı mahkeme kapısında ararız, kimi zaman tarafları aynı masada buluşturup kalıcı bir çözüme ulaşırız. Avukatlığı ve arabuluculuğu bir arada sunmamızın nedeni budur: her uyuşmazlığa, ona en çok yakışan yoldan yaklaşabilmek.',
+      'Bize getirdiğiniz her meseleyi önce dinler, sonra açık ve anlaşılır bir dille anlatırız. Dosyanızı ilk görüşmeden son karara kadar yakından izler, her adımı sizinle birlikte atarız. Bireylere, şirketlere ve yabancı uyruklu müvekkillere, ofisimizde ya da çevrim içi olarak eşlik ederiz.',
     ],
     principlesTitle: 'Çalışma ilkelerimiz',
     principles: [
-      { title: 'Açıklık', body: 'Sürecin işleyişi, olası sonuçları ve maliyeti hakkında baştan anlaşılır bilgi veririz.' },
-      { title: 'Gizlilik', body: 'Paylaşılan her bilgi meslek sırrı kapsamında korunur.' },
-      { title: 'Ulaşılabilirlik', body: 'Görüşmeleri ofisimizde ya da çevrim içi, size uygun zamanda yaparız.' },
+      { title: 'Humanitas', meaning: 'insanlık', body: 'Her dosyanın ardında bir insan vardır. Önce onu görür, ilk gün nasıl yanında durduysak son güne kadar öyle dururuz.' },
+      { title: 'Veritas', meaning: 'gerçek', body: 'Duymak istediğinizi değil, gerçeği söyleriz.' },
+      { title: 'Festina lente', meaning: 'acele etme, ama geç de kalma', body: 'Ne aceleye getiririz ne de geç kalırız. Her adımı zamanında ve özenle atarız.' },
+      { title: 'Fides', meaning: 'güven', body: 'Bize anlattığınız her söz ve verdiğiniz her belge avukatlık sırrıdır, öyle de kalır.' },
     ],
     lawyersTitle: 'Avukatlarımız',
     more: 'Özgeçmiş',
@@ -352,6 +360,7 @@ export const tr = {
     education: 'Eğitim',
     bar: 'Baro',
     email: 'E-posta',
+    languages: 'Diller',
     phone: 'Telefon',
     back: 'Tüm avukatlar',
     close: 'Kapat',
@@ -444,8 +453,7 @@ export const tr = {
     email: 'E-posta',
     kep: 'KEP',
     mapTitle: 'Konum',
-    mapNote: 'Harita Google Haritalar üzerinden yüklenir ve Google’a bağlantı kurar.',
-    mapButton: 'Haritayı göster',
+    directions: 'Yol tarifi al',
     mapLink: 'Google Haritalar’da aç',
   },
 
@@ -482,7 +490,7 @@ export const tr = {
       {
         title: 'Çerezler ve üçüncü taraf hizmetler',
         body: [
-          'Bu site çerez kullanmaz. Yazı tipleri sitenin kendi sunucusundan yüklenir. İletişim sayfasındaki harita yalnızca “Haritayı göster” düğmesine bastığınızda Google Haritalar’dan yüklenir.',
+          'Bu sitenin kendisi çerez kullanmaz. Yazı tipleri sitenin kendi sunucusundan yüklenir. İletişim sayfasındaki harita Google Haritalar’dan yüklenir; Google bu sırada kendi gizlilik politikası kapsamında çerez kullanabilir.',
         ],
       },
       {

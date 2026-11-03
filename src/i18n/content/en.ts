@@ -2,6 +2,12 @@ import type { Content } from './tr';
 
 export const en: Content = {
   home: {
+    kicker: 'Law & Mediation',
+    introLink: 'About mediation',
+    motto: 'Ubi ius, ibi remedium',
+    mottoNote: 'This principle of Roman law guides the way we work.',
+    panelPetitions: '{n} samples · Word and PDF',
+    panelArticles: 'Informative articles',
     practiceTitle: 'Practice areas',
     practiceLead: 'Alongside mediation, we provide legal representation and advice to companies and individuals.',
     practiceLink: 'All practice areas',
@@ -332,16 +338,18 @@ export const en: Content = {
 
   about: {
     title: 'About us',
-    lead: 'Atik Law Office provides legal practice and mediation under one roof.',
+    lead: "Law finds its meaning when it brings a remedy to people's troubles. That belief guides our office.",
     firmTitle: 'Our office',
     firm: [
-      'Our office brings together attorneys registered with the Antalya Bar Association. We advise companies and individuals and represent them in litigation and enforcement proceedings. Alongside legal practice, we offer mediation to help parties reach a shared solution. We also work with foreign nationals and companies, and meet at our office in Alanya or online.',
+      "Atik Law Office works in the belief that law is more than the articles of a statute. Behind every case lies a person's story, a family's future or a business built over years of effort. Sometimes we pursue that right before the courts; sometimes we bring the parties to the same table and reach a lasting solution. This is why we offer legal practice and mediation together: to approach every dispute by the path that suits it best.",
+      'We listen to every matter you bring us first, then explain it in clear, plain language. We follow your case closely from the first meeting to the final decision and take every step together with you. We work with individuals, companies and foreign nationals, at our office or online.',
     ],
     principlesTitle: 'How we work',
     principles: [
-      { title: 'Clarity', body: 'We explain from the outset how the process works, its possible outcomes and its cost.' },
-      { title: 'Confidentiality', body: 'Everything you share is protected by professional secrecy.' },
-      { title: 'Accessibility', body: 'We meet at our office or online, at a time that suits you.' },
+      { title: 'Humanitas', meaning: 'humanity', body: 'Behind every case there is a person. We see that person first, and stand by them to the last day just as we did on the first.' },
+      { title: 'Veritas', meaning: 'truth', body: 'We tell you the truth, not what you want to hear.' },
+      { title: 'Festina lente', meaning: 'make haste slowly', body: 'We neither rush nor fall behind. Every step is taken on time and with care.' },
+      { title: 'Fides', meaning: 'trust', body: 'Every word you tell us and every document you give us is protected by professional secrecy, and it stays that way.' },
     ],
     lawyersTitle: 'Our lawyers',
     more: 'Profile',
@@ -350,6 +358,7 @@ export const en: Content = {
     education: 'Education',
     bar: 'Bar',
     email: 'Email',
+    languages: 'Languages',
     phone: 'Phone',
     back: 'All lawyers',
     close: 'Close',
@@ -442,8 +451,7 @@ export const en: Content = {
     email: 'Email',
     kep: 'Registered email (KEP)',
     mapTitle: 'Location',
-    mapNote: 'The map is loaded from Google Maps and connects to Google.',
-    mapButton: 'Show map',
+    directions: 'Get directions',
     mapLink: 'Open in Google Maps',
   },
 
@@ -478,7 +486,7 @@ export const en: Content = {
       {
         title: 'Cookies and third-party services',
         body: [
-          'This site does not use cookies. Fonts are served from the site itself. The map on the contact page is loaded from Google Maps only when you press “Show map”.',
+          'This site itself does not use cookies. Fonts are served from the site itself. The map on the contact page is loaded from Google Maps, which may use cookies under Google’s own privacy policy.',
         ],
       },
       {

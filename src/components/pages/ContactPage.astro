@@ -14,7 +14,6 @@ const k = c(lang).contact;
 const f = k.fields;
 const a = office.address;
 const mapEmbed = `https://www.google.com/maps?q=${office.mapsCoords}&z=17&output=embed`;
-const mapLink = office.mapsLink;
 ---
 
 <PageHead title={k.title} lead={k.lead} image={pageImage('contact')} />
@@ -168,11 +167,16 @@ const mapLink = office.mapsLink;
       </dl>
 
       <h2 class="map-title">{k.mapTitle}</h2>
-      <div class="map" data-map={mapEmbed}>
-        <p>{k.mapNote}</p>
-        <button class="btn btn--ghost-dark" type="button" data-map-load>{k.mapButton}</button>
-        <a href={mapLink} target="_blank" rel="noopener">{k.mapLink}</a>
+      <div class="map">
+        <iframe src={mapEmbed} title={k.mapLink} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
+      <a class="btn btn--ghost-dark btn--directions" href={office.directionsLink} target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11Z"></path>
+          <circle cx="12" cy="10" r="2.3"></circle>
+        </svg>
+        {k.directions}
+      </a>
     </aside>
   </div>
 </section>
@@ -359,23 +363,27 @@ const mapLink = office.mapsLink;
   }
 
   .map {
-    display: grid;
-    gap: 1rem;
-    justify-items: start;
-    padding: 1.5rem;
     background: var(--limestone-200);
-    font-size: var(--step--1);
-    color: var(--ink-muted);
-  }
-
-  .map.is-loaded {
-    padding: 0;
   }
 
   .map iframe {
+    display: block;
     width: 100%;
     aspect-ratio: 4 / 3;
     border: 0;
+  }
+
+  .btn--directions {
+    margin-top: 1rem;
+    gap: 0.55rem;
+  }
+
+  .btn--directions svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.5;
   }
 
   .btn--ghost-dark {
@@ -491,15 +499,4 @@ const mapLink = office.mapsLink;
     }
   });
 
-  // Harita yalnızca istenince Google'dan yüklenir
-  const map = document.querySelector<HTMLElement>('[data-map]');
-  map?.querySelector('[data-map-load]')?.addEventListener('click', () => {
-    const frame = document.createElement('iframe');
-    frame.src = map.dataset.map!;
-    frame.loading = 'lazy';
-    frame.referrerPolicy = 'no-referrer-when-downgrade';
-    frame.title = map.querySelector('a')?.textContent ?? 'Google Maps';
-    map.replaceChildren(frame);
-    map.classList.add('is-loaded');
-  });
 </script>

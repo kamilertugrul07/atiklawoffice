@@ -1,13 +1,18 @@
 ---
+// Ana sayfa: logo sahnesiyle açılış (HomeHero), I–III numaralı bölümler, Latince ilke bandı,
+// dilekçe ve makalelere giden fotoğraflı bant, görüşme bandı.
+// Önceki (logo animasyonlu) hâli git'te "anasayfa-eski" etiketinde saklı.
+import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import Hero from '../../components/Hero.astro';
-import TeamCard from '../../components/TeamCard.astro';
+import HomeHero from '../../components/HomeHero.astro';
 import AreaCard from '../../components/AreaCard.astro';
-import DeadlineCalc from '../../components/DeadlineCalc.astro';
+import Monogram from '../../components/Monogram.astro';
 import { team } from '../../data/office';
 import { langs, path, t, type Lang } from '../../i18n/ui';
 import { c } from '../../i18n/content';
 import { areaLinks } from '../../lib/areas';
+import { petitionsFor } from '../../lib/petitions';
+import { pageImage } from '../../lib/images';
 
 export function getStaticPaths() {
   return langs.map((lang) => ({ params: { lang } }));
@@ -16,16 +21,21 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const s = t(lang);
 const k = c(lang);
+const h = k.home;
 const links = await areaLinks(lang);
+const petitionCount = (await petitionsFor()).length;
 ---
 
 <Base lang={lang}>
-  <Hero lang={lang} />
+  <HomeHero lang={lang} />
 
   <section class="section">
     <div class="wrap">
       <div class="split">
-        <h2 class="section-title">{s.intro.title}</h2>
+        <div>
+          <p class="numeral" aria-hidden="true">I</p>
+          <h2 class="section-title">{s.intro.title}</h2>
+        </div>
         <p class="intro__lead">{s.intro.lead}</p>
       </div>
       <ul class="points">
@@ -38,49 +48,89 @@ const links = await areaLinks(lang);
           ))
         }
       </ul>
-      <a class="text-link" href={`${path(lang, 'mediation')}#surec`}>{k.mediation.processTitle}</a>
+      <a class="text-link" href={path(lang, 'mediation')}>{h.introLink}</a>
     </div>
   </section>
 
   <section class="section section--dark">
     <div class="wrap">
       <div class="split">
-        <h2 class="section-title">{k.home.practiceTitle}</h2>
-        <p class="practice-lead">{k.home.practiceLead}</p>
+        <div>
+          <p class="numeral" aria-hidden="true">II</p>
+          <h2 class="section-title">{h.practiceTitle}</h2>
+        </div>
+        <p class="practice-lead">{h.practiceLead}</p>
       </div>
       <ul class="areas">
         {
-          k.practice.areas.slice(0, 8).map((area) => (
-            <AreaCard id={area.id} title={area.title} items={area.items} href={links[area.id]} dark />
+          k.practice.areas
+            .slice(0, 8)
+            .map((area) => <AreaCard id={area.id} title={area.title} items={area.items} href={links[area.id]} dark />)
+        }
+      </ul>
+      <a class="text-link text-link--light" href={path(lang, 'practice')}>{h.practiceLink}</a>
+    </div>
+  </section>
+
+  <section class="motto">
+    <div class="wrap motto__inner">
+      <p class="motto__latin" lang="la">{h.motto}</p>
+      <p class="motto__meaning">{s.hero.title.replace('\n', ' ')}</p>
+      <p class="motto__note">{h.mottoNote}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="numeral" aria-hidden="true">III</p>
+      <h2 class="section-title">{h.teamTitle}</h2>
+      <ul class="team">
+        {
+          team.map((lawyer) => (
+            <li>
+              <a href={`${path(lang, 'about')}${lawyer.slug}/`}>
+                <div class="team__frame">
+                  {lawyer.photo ? (
+                    <img src={lawyer.photo} alt="" width="800" height="800" />
+                  ) : (
+                    <Monogram name={lawyer.name} />
+                  )}
+                </div>
+                <h3>
+                  {lawyer.isMediator ? 'Av. Arb.' : 'Av.'} {lawyer.name}
+                </h3>
+                <p>{lawyer.title[lang]}</p>
+              </a>
+            </li>
           ))
         }
       </ul>
-      <a class="text-link text-link--light" href={path(lang, 'practice')}>{k.home.practiceLink}</a>
+      <a class="text-link" href={path(lang, 'about')}>{h.teamLink}</a>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <DeadlineCalc lang={lang} />
-      <a class="text-link" href={path(lang, 'resources')}>{k.resources.petitionsTitle}</a>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2 class="section-title">{k.home.teamTitle}</h2>
-      <div class="team">
-        {team.map((lawyer) => <TeamCard lawyer={lawyer} lang={lang} compact />)}
-      </div>
-      <a class="text-link" href={path(lang, 'about')}>{k.home.teamLink}</a>
-    </div>
+  <section class="panels" aria-label={`${s.nav.resources}, ${s.nav.articles}`}>
+    <a class="panel" href={path(lang, 'resources')}>
+      <Image src={pageImage('resources')!} alt="" widths={[600, 900, 1200]} sizes="(max-width: 50rem) 100vw, 50vw" quality={70} />
+      <span class="panel__text">
+        <span class="panel__kicker">{h.panelPetitions.replace('{n}', String(petitionCount))}</span>
+        <span class="panel__title">{s.nav.resources}</span>
+      </span>
+    </a>
+    <a class="panel" href={path(lang, 'articles')}>
+      <Image src={pageImage('articles')!} alt="" widths={[600, 900, 1200]} sizes="(max-width: 50rem) 100vw, 50vw" quality={70} />
+      <span class="panel__text">
+        <span class="panel__kicker">{h.panelArticles}</span>
+        <span class="panel__title">{s.nav.articles}</span>
+      </span>
+    </a>
   </section>
 
   <section class="section contact-band">
     <div class="wrap split">
-      <h2 class="section-title">{k.home.contactTitle}</h2>
+      <h2 class="section-title">{h.contactTitle}</h2>
       <div>
-        <p>{k.home.contactLead}</p>
+        <p>{h.contactLead}</p>
         <a class="btn btn--solid" href={path(lang, 'contact')}>{s.cta}</a>
       </div>
     </div>
@@ -88,15 +138,34 @@ const links = await areaLinks(lang);
 </Base>
 
 <style>
-  .intro__lead {
+  /* Bölüm numarası */
+  .numeral {
+    margin-bottom: 0.75rem;
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 400;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .split {
+    align-items: end;
+  }
+
+  .intro__lead,
+  .practice-lead {
     max-width: 36rem;
     padding-top: 1.75rem;
-    border-top: 2px solid var(--gold);
+    border-top: 1px solid var(--gold);
     font-size: var(--step-1);
     font-weight: 330;
+  }
+
+  .intro__lead {
     color: var(--ink-muted);
   }
 
+  /* Seçilen B düzeni: altın çizgili dört ilke kartı */
   .points {
     margin: clamp(2.5rem, 6vw, 4rem) 0 0;
     padding: 0;
@@ -132,12 +201,6 @@ const links = await areaLinks(lang);
     overflow-wrap: break-word;
   }
 
-  .practice-lead {
-    max-width: 36rem;
-    font-size: var(--step-1);
-    font-weight: 330;
-  }
-
   .areas {
     margin: clamp(2rem, 6vw, 4.5rem) 0 0;
     padding: 0;
@@ -155,15 +218,176 @@ const links = await areaLinks(lang);
     color: #fff;
   }
 
-  .team {
+  /* Latince ilke bandı */
+  .motto {
+    padding-block: clamp(4rem, 10vw, 8rem);
+    background:
+      radial-gradient(ellipse 50% 80% at 50% 0%, var(--petrol-700) 0%, transparent 70%),
+      var(--petrol-900);
+    color: var(--silver);
+    text-align: center;
+  }
+
+  .motto__inner {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    justify-items: center;
+    gap: 1rem;
+  }
+
+  .motto__latin {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 450;
+    letter-spacing: 0.08em;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: #f3f3f2;
+  }
+
+  .motto__meaning {
+    padding-top: 1rem;
+    border-top: 1px solid var(--gold);
+    font-family: var(--font-serif);
+    font-size: var(--step-2);
+    font-style: italic;
+    color: var(--gold-soft);
+  }
+
+  .motto__note {
+    max-width: 40ch;
+    font-size: var(--step--1);
+    color: var(--silver-muted);
+  }
+
+  /* Avukatlar: büyük kare çerçeveler, fotoğraf gelince içine yerleşir */
+  .team {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 2.5rem;
   }
 
-  @media (max-width: 40rem) {
-    .team {
-      gap: 1.25rem;
+  .team a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .team__frame {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 70% at 50% 40%, var(--petrol-700) 0%, transparent 75%),
+      var(--petrol-800);
+    border: 1px solid var(--gold);
+  }
+
+  .team__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .team__frame :global(.monogram) {
+    width: 42%;
+  }
+
+  .team__frame :global(.monogram span) {
+    font-size: clamp(1.75rem, 4vw, 3.5rem);
+  }
+
+  .team h3 {
+    margin-top: 1.25rem;
+    font-size: var(--step-2);
+  }
+
+  .team p {
+    margin-top: 0.25rem;
+    font-size: var(--step--1);
+    color: var(--ink-muted);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .team a:hover h3 {
+      text-decoration: underline;
+      text-decoration-color: var(--gold);
+      text-underline-offset: 0.18em;
+      text-decoration-thickness: 0.05em;
+    }
+
+    .team a:hover img {
+      transform: scale(1.04);
+    }
+  }
+
+  /* Fotoğraflı bant: dilekçeler ve makaleler */
+  .panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .panel {
+    position: relative;
+    display: block;
+    min-height: clamp(18rem, 36vw, 28rem);
+    overflow: hidden;
+    color: #f3f3f2;
+    text-decoration: none;
+  }
+
+  .panel :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgb(12 35 39 / 0.88) 0%, rgb(12 35 39 / 0.2) 60%, rgb(12 35 39 / 0.1) 100%);
+  }
+
+  .panel__text {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    display: grid;
+    gap: 0.4rem;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .panel__kicker {
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+
+  .panel__title {
+    font-family: var(--font-serif);
+    font-size: var(--step-3);
+    line-height: 1.1;
+  }
+
+  .panel__title::after {
+    content: ' →';
+    font-family: var(--font-sans);
+    font-size: 0.6em;
+    color: var(--gold);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .panel:hover :global(img) {
+      transform: scale(1.04);
     }
   }
 
@@ -186,7 +410,19 @@ const links = await areaLinks(lang);
     }
   }
 
+  @media (max-width: 50rem) {
+    .panels {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Telefonda derli toplu */
   @media (max-width: 40rem) {
+    .numeral {
+      margin-bottom: 0.25rem;
+      font-size: 2.5rem;
+    }
+
     .areas {
       gap: 1.75rem 0.75rem;
     }
@@ -207,5 +443,34 @@ const links = await areaLinks(lang);
       font-size: 1rem;
     }
 
+    .motto {
+      padding-block: 3rem;
+    }
+
+    .team {
+      gap: 0.75rem;
+    }
+
+    .team h3 {
+      margin-top: 0.6rem;
+      font-size: 0.9375rem;
+      line-height: 1.25;
+    }
+
+    .team p {
+      font-size: 0.75rem;
+    }
+
+    .team__frame :global(.monogram span) {
+      font-size: 1.25rem;
+    }
+
+    .panel {
+      min-height: 11rem;
+    }
+
+    .panel__title {
+      font-size: 1.5rem;
+    }
   }
 </style>

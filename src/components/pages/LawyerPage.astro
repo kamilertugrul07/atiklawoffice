@@ -74,6 +74,14 @@ const fullName = `${lawyer.isMediator ? 'Av. Arb.' : 'Av.'} ${lawyer.name}`;
           <dd>{s.footer.bar}</dd>
         </div>
         {
+          lawyer.languages[lang] && (
+            <div>
+              <dt>{a.languages}</dt>
+              <dd>{lawyer.languages[lang]}</dd>
+            </div>
+          )
+        }
+        {
           lawyer.email && (
             <div>
               <dt>{a.email}</dt>
